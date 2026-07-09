@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { ArrowLeft, ArrowRight, Clock, Hammer, Star } from "lucide-react";
+import { ArrowLeft, ArrowRight, Clock, CheckCircle2, Hammer, Star } from "lucide-react";
 import {
   formatProjectCategory,
   getProjectReadingTime,
@@ -18,9 +18,10 @@ import { springSoft } from "@/lib/motion";
 
 export function FeaturedProjectsCarousel() {
   const { featuredProjects, locale, ui } = useLocale();
+  const projects = featuredProjects.filter((project) => project.slug !== "coach-os");
   const prefersReducedMotion = useReducedMotion();
 
-  if (featuredProjects.length === 0) return null;
+  if (projects.length === 0) return null;
 
   return (
     <section className="py-24 sm:py-32">
@@ -46,9 +47,10 @@ export function FeaturedProjectsCarousel() {
         </ScrollReveal>
 
         <div className="-mx-4 flex gap-6 overflow-x-auto px-4 pb-4 snap-x snap-mandatory scrollbar-none sm:-mx-6 sm:px-6">
-          {featuredProjects.map((project, index) => {
+          {projects.map((project, index) => {
             const timeline = getProjectTimeline(project, locale);
             const isBuilding = project.status === "in-development";
+            const isProductionReady = project.status === "production-ready";
 
             return (
               <ScrollReveal
@@ -66,7 +68,13 @@ export function FeaturedProjectsCarousel() {
                         <Badge variant="secondary" className="rounded-full text-[10px]">
                           {formatProjectCategory(project.category, locale)}
                         </Badge>
-                        {isBuilding && (
+                        {isProductionReady && (
+                        <Badge variant="outline" className="rounded-full border-emerald-500/30 text-[10px] text-emerald-600 dark:text-emerald-400">
+                          <CheckCircle2 className="me-1 size-3" />
+                          {project.showcase?.statusBadge ?? ui.projects.productionReady}
+                        </Badge>
+                      )}
+                      {isBuilding && (
                           <Badge variant="outline" className="rounded-full text-[10px]">
                             <Hammer className="me-1 size-3" />
                             {ui.featured.currentlyBuilding}

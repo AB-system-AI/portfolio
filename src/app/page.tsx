@@ -1,4 +1,5 @@
 import { Hero } from "@/components/sections/hero";
+import { FlagshipProjectSpotlight } from "@/components/sections/flagship-project-spotlight";
 import { FeaturedProjectsCarousel } from "@/components/sections/featured-projects-carousel";
 import { ServicesCards } from "@/components/sections/services-cards";
 import { ClientLogos } from "@/components/sections/client-logos";
@@ -9,6 +10,7 @@ export default function HomePage() {
   return (
     <>
       <Hero />
+      <FlagshipProjectSpotlight />
       <FeaturedProjectsCarousel />
       <ClientLogos />
       <ServicesCards />

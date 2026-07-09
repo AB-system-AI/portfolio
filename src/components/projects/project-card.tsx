@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { ArrowRight, Clock, Hammer, Pin, Star } from "lucide-react";
+import { ArrowRight, CheckCircle2, Clock, Hammer, Pin, Star } from "lucide-react";
 import type { Project } from "@/lib/content/types";
 import {
   formatProjectCategory,
@@ -31,6 +31,7 @@ export function ProjectCard({ project, index, compact = false }: ProjectCardProp
   const readingTime = getProjectReadingTime(project);
   const timeline = getProjectTimeline(project, locale);
   const isBuilding = project.status === "in-development";
+  const isProductionReady = project.status === "production-ready";
 
   return (
     <ScrollReveal delay={index * 0.08}>
@@ -55,6 +56,12 @@ export function ProjectCard({ project, index, compact = false }: ProjectCardProp
                 <Badge className="rounded-full bg-background/80 text-[10px] backdrop-blur-sm">
                   <Star className="me-1 size-3" />
                   {ui.projects.featuredBadge}
+                </Badge>
+              )}
+              {isProductionReady && (
+                <Badge className="rounded-full border-emerald-500/20 bg-emerald-500/10 text-[10px] text-emerald-700 backdrop-blur-sm dark:text-emerald-300">
+                  <CheckCircle2 className="me-1 size-3" />
+                  {project.showcase?.statusBadge ?? ui.projects.productionReady}
                 </Badge>
               )}
               {isBuilding && (

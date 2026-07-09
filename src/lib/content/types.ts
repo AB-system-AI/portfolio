@@ -80,7 +80,39 @@ export type ProjectCategory =
   | "design"
   | "other";
 
-export type ProjectStatus = "completed" | "in-development";
+export type ProjectStatus = "completed" | "in-development" | "production-ready";
+
+export interface ProjectShowcaseStat {
+  value: string;
+  label: string;
+}
+
+export interface ProjectShowcasePhase {
+  title: string;
+}
+
+export interface ProjectShowcase {
+  statusBadge: string;
+  highlights: string[];
+  stats: ProjectShowcaseStat[];
+  productLines: string[];
+  featureGrid: string[];
+  timelinePhases: ProjectShowcasePhase[];
+  labels: {
+    highlights: string;
+    statistics: string;
+    productLines: string;
+    techStack: string;
+    features: string;
+    timeline: string;
+    gallery: string;
+    viewCaseStudy: string;
+    flagship: string;
+    mockupDesktop: string;
+    mockupTablet: string;
+    mockupMobile: string;
+  };
+}
 
 export type ProjectSegment =
   | "personal"
@@ -123,6 +155,7 @@ export interface Project {
   architecture?: string;
   developmentProcess?: string[];
   pinned?: boolean;
+  showcase?: ProjectShowcase;
   /** Fallback card styling when no cover image is provided */
   gradient?: string;
   accent?: string;
