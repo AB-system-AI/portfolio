@@ -5,10 +5,11 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X } from "lucide-react";
-import { navLinks, siteConfig } from "@/lib/data";
 import { ThemeToggle } from "./theme-toggle";
+import { LanguageSwitcher } from "./language-switcher";
 import { Button } from "@/components/ui/button";
 import { MagneticLinkButton } from "@/components/ui/magnetic-button";
+import { useLocale } from "@/components/providers/locale-provider";
 import { cn } from "@/lib/utils";
 import { springSoft } from "@/lib/motion";
 
@@ -16,6 +17,7 @@ const menuId = "mobile-navigation-menu";
 
 export function Navbar() {
   const pathname = usePathname();
+  const { siteConfig, navLinks, ui } = useLocale();
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
@@ -118,22 +120,20 @@ export function Navbar() {
                     transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
                   />
                 )}
-                {!isActive && (
-                  <span className="absolute bottom-1 left-3 right-3 h-px origin-left scale-x-0 bg-foreground/40 transition-transform group-hover:scale-x-100" />
-                )}
               </Link>
             );
           })}
         </div>
 
         <div className="flex items-center gap-2">
+          <LanguageSwitcher className="hidden sm:flex" />
           <ThemeToggle />
           <MagneticLinkButton
             href="/contact"
             size="sm"
             className="hidden rounded-full px-4 sm:inline-flex"
           >
-            Let&apos;s Talk
+            {ui.nav.letsTalk}
           </MagneticLinkButton>
           <Button
             ref={menuButtonRef}
@@ -141,7 +141,7 @@ export function Navbar() {
             size="icon"
             className="md:hidden"
             onClick={() => setIsOpen(!isOpen)}
-            aria-label={isOpen ? "Close menu" : "Open menu"}
+            aria-label={isOpen ? ui.nav.closeMenu : ui.nav.openMenu}
             aria-expanded={isOpen}
             aria-controls={menuId}
           >
@@ -157,7 +157,7 @@ export function Navbar() {
             id={menuId}
             role="dialog"
             aria-modal="true"
-            aria-label="Mobile navigation"
+            aria-label={ui.nav.mobileNav}
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
@@ -165,6 +165,7 @@ export function Navbar() {
             className="glass mx-auto mt-2 max-w-6xl overflow-hidden rounded-2xl md:hidden"
           >
             <div className="flex flex-col p-4">
+              <LanguageSwitcher className="mb-2 sm:hidden" />
               {navLinks.map((link, i) => {
                 const isActive = pathname === link.href;
                 return (
@@ -191,7 +192,7 @@ export function Navbar() {
                 );
               })}
               <MagneticLinkButton href="/contact" className="mt-4 rounded-full" onClick={closeMenu}>
-                Let&apos;s Talk
+                {ui.nav.letsTalk}
               </MagneticLinkButton>
             </div>
           </motion.div>

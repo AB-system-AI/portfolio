@@ -10,6 +10,7 @@ import { getProjectVisual } from "@/lib/content/project-utils";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { useReducedMotion } from "@/hooks/use-reduced-motion";
+import { useLocale } from "@/components/providers/locale-provider";
 import { springSoft } from "@/lib/motion";
 
 interface ProjectGalleryProps {
@@ -17,6 +18,7 @@ interface ProjectGalleryProps {
 }
 
 function GalleryPlaceholder({ project }: { project: Project }) {
+  const { ui } = useLocale();
   const { gradient, accent } = getProjectVisual(project);
   const candidates = getProjectImageCandidates(project.slug);
 
@@ -31,10 +33,10 @@ function GalleryPlaceholder({ project }: { project: Project }) {
         <div className="text-center">
           <ImageIcon className="mx-auto size-8 opacity-40" style={{ color: accent }} />
           <p className="mt-3 text-sm font-medium" style={{ color: accent }}>
-            Screenshots coming soon
+            {ui.projects.galleryComingSoon}
           </p>
           <p className="mt-1 text-xs opacity-60" style={{ color: accent }}>
-            Add images to public/projects/{project.slug}/
+            {ui.projects.galleryHint.replace("{slug}", project.slug)}
           </p>
         </div>
       </div>

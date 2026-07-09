@@ -14,7 +14,7 @@ import {
   ChevronDown,
   type LucideIcon,
 } from "lucide-react";
-import { getAllServices, servicesIntro } from "@/lib/content/services";
+import { useLocale } from "@/components/providers/locale-provider";
 import { SectionHeader } from "@/components/animations/section-header";
 import { ScrollReveal } from "@/components/animations/scroll-reveal";
 import { PremiumCard } from "@/components/animations/premium-card";
@@ -39,7 +39,7 @@ interface ServicesCardsProps {
 
 export function ServicesCards({ showHeader = true }: ServicesCardsProps) {
   const prefersReducedMotion = useReducedMotion();
-  const services = getAllServices();
+  const { services, servicesIntro, ui } = useLocale();
   const [expanded, setExpanded] = useState<number | null>(null);
 
   return (
@@ -47,8 +47,8 @@ export function ServicesCards({ showHeader = true }: ServicesCardsProps) {
       <div className="mx-auto max-w-6xl px-4 sm:px-6">
         {showHeader && (
           <SectionHeader
-            label="Services"
-            title="Software solutions for growing businesses"
+            label={ui.services.pageLabel}
+            title={ui.home.servicesTitle}
             description={servicesIntro}
             align="center"
             className="mx-auto text-center"
@@ -57,9 +57,7 @@ export function ServicesCards({ showHeader = true }: ServicesCardsProps) {
 
         {services.length === 0 ? (
           <div className="glass-card rounded-2xl px-8 py-16 text-center">
-            <p className="text-sm text-muted-foreground">
-              Services will appear here once content is added to src/lib/content/services.ts.
-            </p>
+            <p className="text-sm text-muted-foreground">{ui.services.empty}</p>
           </div>
         ) : (
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
@@ -87,7 +85,7 @@ export function ServicesCards({ showHeader = true }: ServicesCardsProps) {
 
                     <div className="mt-4 rounded-xl border border-border/60 bg-muted/20 p-4">
                       <p className="text-xs font-semibold uppercase tracking-wider">
-                        Business value
+                        {ui.services.businessValue}
                       </p>
                       <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
                         {service.businessValue}
@@ -100,7 +98,7 @@ export function ServicesCards({ showHeader = true }: ServicesCardsProps) {
                       className="mt-5 inline-flex items-center gap-2 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
                       aria-expanded={isExpanded}
                     >
-                      {isExpanded ? "Hide details" : "View details"}
+                      {isExpanded ? ui.services.hideDetails : ui.services.viewDetails}
                       <ChevronDown
                         className={cn(
                           "size-4 transition-transform",
@@ -120,7 +118,7 @@ export function ServicesCards({ showHeader = true }: ServicesCardsProps) {
                         >
                           <div className="pt-4">
                             <p className="text-xs font-semibold uppercase tracking-wider">
-                              Key features
+                              {ui.services.keyFeatures}
                             </p>
                             <ul className="mt-3 space-y-2" aria-label={`${service.title} features`}>
                               {service.features.map((feature) => (
@@ -134,7 +132,7 @@ export function ServicesCards({ showHeader = true }: ServicesCardsProps) {
                               ))}
                             </ul>
                             <p className="mt-5 text-xs font-semibold uppercase tracking-wider">
-                              Technologies
+                              {ui.services.technologies}
                             </p>
                             <p className="mt-2 text-xs leading-relaxed text-muted-foreground">
                               {service.technologies.join(" · ")}

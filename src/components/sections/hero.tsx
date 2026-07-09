@@ -2,14 +2,13 @@
 
 import { motion } from "framer-motion";
 import { ArrowRight, Mail } from "lucide-react";
-import { siteConfig } from "@/lib/data";
-import { getPortfolioStats } from "@/lib/content/project-utils";
 import { MagneticLinkButton } from "@/components/ui/magnetic-button";
 import { AvailabilityBadge } from "@/components/ui/availability-badge";
 import { AnimatedBackground } from "@/components/animations/animated-background";
 import { TextReveal } from "@/components/animations/text-reveal";
 import { TypingText } from "@/components/animations/typing-text";
 import { StatsCounter } from "@/components/sections/stats-counter";
+import { useLocale } from "@/components/providers/locale-provider";
 import { useReducedMotion } from "@/hooks/use-reduced-motion";
 import { EASE_PREMIUM } from "@/lib/motion";
 
@@ -32,7 +31,7 @@ const itemVariants = {
 
 export function Hero() {
   const prefersReducedMotion = useReducedMotion();
-  const stats = getPortfolioStats();
+  const { siteConfig, portfolioStats, ui } = useLocale();
 
   return (
     <section className="relative flex min-h-screen items-center overflow-hidden pt-24">
@@ -53,13 +52,13 @@ export function Hero() {
             variants={itemVariants}
             className="font-heading mt-8 text-balance text-4xl font-semibold leading-[1.05] tracking-tight text-foreground sm:text-5xl md:text-6xl lg:text-7xl"
           >
-            <TextReveal text="Building digital" />
+            <TextReveal text={ui.hero.building} />
             <br />
             <span className="text-muted-foreground">
-              <TextReveal text="experiences" delay={0.15} />
+              <TextReveal text={ui.hero.experiences} delay={0.15} />
             </span>
             <br />
-            <TextReveal text="that matter." delay={0.3} />
+            <TextReveal text={ui.hero.thatMatter} delay={0.3} />
           </motion.h1>
 
           <motion.p
@@ -74,8 +73,8 @@ export function Hero() {
             className="mt-10 flex flex-wrap items-center gap-4"
           >
             <MagneticLinkButton href="/projects" size="xl" className="rounded-full px-8">
-              View My Work
-              <ArrowRight className="size-4" />
+              {ui.hero.viewWork}
+              <ArrowRight className="size-4 rtl:rotate-180" />
             </MagneticLinkButton>
             <MagneticLinkButton
               href="/contact"
@@ -84,7 +83,7 @@ export function Hero() {
               className="rounded-full px-8"
             >
               <Mail className="size-4" />
-              Get in Touch
+              {ui.hero.getInTouch}
             </MagneticLinkButton>
           </motion.div>
 
@@ -92,7 +91,7 @@ export function Hero() {
             variants={itemVariants}
             className="mt-16 grid grid-cols-2 gap-6 border-t border-border/50 pt-8 sm:mt-20 sm:grid-cols-3 lg:grid-cols-5 sm:gap-8 sm:pt-10"
           >
-            {stats.map((stat, index) => (
+            {portfolioStats.map((stat, index) => (
               <StatsCounter
                 key={stat.label}
                 value={stat.value}

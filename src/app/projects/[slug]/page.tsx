@@ -1,9 +1,8 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import {
-  getAllProjectSlugs,
-  getProjectBySlug,
-} from "@/lib/content/projects";
+import { getAllProjectSlugs } from "@/lib/content/projects";
+import { getProjectBySlug } from "@/lib/i18n/localized-content";
+import { getLocale } from "@/lib/i18n/get-locale";
 import { enrichProject } from "@/lib/project-images.server";
 import { createPageMetadata } from "@/lib/metadata";
 import { ProjectDetail } from "@/components/projects/project-detail";
@@ -20,7 +19,8 @@ export async function generateMetadata({
   params,
 }: ProjectPageProps): Promise<Metadata> {
   const { slug } = await params;
-  const project = getProjectBySlug(slug);
+  const locale = await getLocale();
+  const project = getProjectBySlug(slug, locale);
 
   if (!project) {
     return createPageMetadata("Project Not Found", "The requested project could not be found.", `/projects/${slug}`);
@@ -35,7 +35,8 @@ export async function generateMetadata({
 
 export default async function ProjectPage({ params }: ProjectPageProps) {
   const { slug } = await params;
-  const project = getProjectBySlug(slug);
+  const locale = await getLocale();
+  const project = getProjectBySlug(slug, locale);
 
   if (!project) {
     notFound();

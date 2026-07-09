@@ -14,6 +14,7 @@ import { PremiumCard } from "@/components/animations/premium-card";
 import { Badge } from "@/components/ui/badge";
 import { ProjectVisual } from "./project-visual";
 import { ProjectLinks } from "./project-links";
+import { useLocale } from "@/components/providers/locale-provider";
 import { useReducedMotion } from "@/hooks/use-reduced-motion";
 import { springSoft } from "@/lib/motion";
 import { cn } from "@/lib/utils";
@@ -26,8 +27,9 @@ interface ProjectCardProps {
 
 export function ProjectCard({ project, index, compact = false }: ProjectCardProps) {
   const prefersReducedMotion = useReducedMotion();
+  const { locale, ui } = useLocale();
   const readingTime = getProjectReadingTime(project);
-  const timeline = getProjectTimeline(project);
+  const timeline = getProjectTimeline(project, locale);
   const isBuilding = project.status === "in-development";
 
   return (
@@ -42,23 +44,23 @@ export function ProjectCard({ project, index, compact = false }: ProjectCardProp
         <Link href={`/projects/${project.slug}`} className="block">
           <div className="relative overflow-hidden">
             <ProjectVisual project={project} index={index} parallax />
-            <div className="absolute top-4 left-4 flex flex-wrap gap-2">
+            <div className="absolute top-4 start-4 flex flex-wrap gap-2">
               {project.pinned && (
                 <Badge className="rounded-full bg-background/80 text-[10px] backdrop-blur-sm">
-                  <Pin className="mr-1 size-3" />
-                  Pinned
+                  <Pin className="me-1 size-3" />
+                  {ui.projects.pinnedBadge}
                 </Badge>
               )}
               {project.featured && (
                 <Badge className="rounded-full bg-background/80 text-[10px] backdrop-blur-sm">
-                  <Star className="mr-1 size-3" />
-                  Featured
+                  <Star className="me-1 size-3" />
+                  {ui.projects.featuredBadge}
                 </Badge>
               )}
               {isBuilding && (
                 <Badge className="rounded-full bg-background/80 text-[10px] backdrop-blur-sm">
-                  <Hammer className="mr-1 size-3" />
-                  Currently Building
+                  <Hammer className="me-1 size-3" />
+                  {ui.projects.currentlyBuilding}
                 </Badge>
               )}
             </div>
@@ -68,14 +70,14 @@ export function ProjectCard({ project, index, compact = false }: ProjectCardProp
         <div className={cn("p-6", compact && "p-5")}>
           <div className="flex flex-wrap items-center gap-2">
             <Badge variant="secondary" className="rounded-full text-xs font-normal">
-              {formatProjectCategory(project.category)}
+              {formatProjectCategory(project.category, locale)}
             </Badge>
             {timeline && (
               <span className="text-xs text-muted-foreground">{timeline}</span>
             )}
             <span className="inline-flex items-center gap-1 text-xs text-muted-foreground">
               <Clock className="size-3" />
-              {readingTime} min
+              {readingTime} {ui.projects.min}
             </span>
           </div>
 
@@ -116,15 +118,15 @@ export function ProjectCard({ project, index, compact = false }: ProjectCardProp
           <div className="mt-6 flex flex-wrap items-center gap-3">
             <ProjectLinks project={project} />
             <motion.div
-              whileHover={prefersReducedMotion ? undefined : { x: 3 }}
+              whileHover={prefersReducedMotion ? undefined : { x: locale === "ar" ? -3 : 3 }}
               transition={springSoft}
             >
               <Link
                 href={`/projects/${project.slug}`}
                 className="inline-flex items-center gap-1 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
               >
-                Case study
-                <ArrowRight className="size-3.5" />
+                {ui.projects.caseStudy}
+                <ArrowRight className="size-3.5 rtl:rotate-180" />
               </Link>
             </motion.div>
           </div>

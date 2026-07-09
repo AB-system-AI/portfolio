@@ -4,7 +4,7 @@ import { useState, type FormEvent } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Send, CheckCircle, Mail, MapPin, Phone, Copy, Check } from "lucide-react";
 import { WhatsAppIcon } from "@/components/icons/brand-icons";
-import { siteConfig } from "@/lib/data";
+import { useLocale } from "@/components/providers/locale-provider";
 import { SectionHeader } from "@/components/animations/section-header";
 import { ScrollReveal } from "@/components/animations/scroll-reveal";
 import { PremiumCard } from "@/components/animations/premium-card";
@@ -18,12 +18,16 @@ interface ContactFormProps {
   showHeader?: boolean;
 }
 
-function CopyEmailButton() {
+function CopyEmailButton({ email, copyLabel, copiedLabel }: {
+  email: string;
+  copyLabel: string;
+  copiedLabel: string;
+}) {
   const [copied, setCopied] = useState(false);
 
   const handleCopy = async () => {
     try {
-      await navigator.clipboard.writeText(siteConfig.email);
+      await navigator.clipboard.writeText(email);
       setCopied(true);
       window.setTimeout(() => setCopied(false), 2000);
     } catch {
@@ -40,12 +44,13 @@ function CopyEmailButton() {
       className="rounded-full"
     >
       {copied ? <Check className="size-3.5" /> : <Copy className="size-3.5" />}
-      {copied ? "Copied" : "Copy email"}
+      {copied ? copiedLabel : copyLabel}
     </Button>
   );
 }
 
 export function ContactForm({ showHeader = true }: ContactFormProps) {
+  const { siteConfig, ui } = useLocale();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
 
@@ -62,9 +67,9 @@ export function ContactForm({ showHeader = true }: ContactFormProps) {
       <div className="mx-auto max-w-6xl px-4 sm:px-6">
         {showHeader && (
           <SectionHeader
-            label="Contact"
-            title="Let's work together"
-            description="Have a project in mind or just want to say hello? I'd love to hear from you."
+            label={ui.contact.pageLabel}
+            title={ui.contact.pageTitle}
+            description={ui.contact.pageDescription}
           />
         )}
 
@@ -72,7 +77,7 @@ export function ContactForm({ showHeader = true }: ContactFormProps) {
           <ScrollReveal className="lg:col-span-2">
             <PremiumCard className="h-full p-6 sm:p-8">
               <div>
-                <h2 className="text-lg font-semibold">Get in touch</h2>
+                <h2 className="text-lg font-semibold">{ui.contact.getInTouch}</h2>
                 <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
                   {siteConfig.availability}
                 </p>
@@ -88,14 +93,18 @@ export function ContactForm({ showHeader = true }: ContactFormProps) {
                       <Mail className="size-4" aria-hidden="true" />
                     </div>
                     <div>
-                      <p className="text-xs text-muted-foreground">Email</p>
+                      <p className="text-xs text-muted-foreground">{ui.contact.email}</p>
                       <p className="text-sm font-medium group-hover:underline">
                         {siteConfig.email}
                       </p>
                     </div>
                   </a>
                   <div className="mt-3">
-                    <CopyEmailButton />
+                    <CopyEmailButton
+                      email={siteConfig.email}
+                      copyLabel={ui.contact.copyEmail}
+                      copiedLabel={ui.contact.copied}
+                    />
                   </div>
                 </div>
 
@@ -107,7 +116,7 @@ export function ContactForm({ showHeader = true }: ContactFormProps) {
                     <Phone className="size-4" aria-hidden="true" />
                   </div>
                   <div>
-                    <p className="text-xs text-muted-foreground">Phone</p>
+                    <p className="text-xs text-muted-foreground">{ui.contact.phone}</p>
                     <p className="text-sm font-medium">{siteConfig.phone}</p>
                   </div>
                 </a>
@@ -122,8 +131,8 @@ export function ContactForm({ showHeader = true }: ContactFormProps) {
                     <WhatsAppIcon className="size-4" />
                   </div>
                   <div>
-                    <p className="text-xs text-muted-foreground">WhatsApp</p>
-                    <p className="text-sm font-medium">Message on WhatsApp</p>
+                    <p className="text-xs text-muted-foreground">{ui.contact.whatsapp}</p>
+                    <p className="text-sm font-medium">{ui.contact.whatsapp}</p>
                   </div>
                 </a>
 
@@ -132,7 +141,7 @@ export function ContactForm({ showHeader = true }: ContactFormProps) {
                     <MapPin className="size-4" aria-hidden="true" />
                   </div>
                   <div>
-                    <p className="text-xs text-muted-foreground">Location</p>
+                    <p className="text-xs text-muted-foreground">{ui.contact.location}</p>
                     <p className="text-sm font-medium">{siteConfig.location}</p>
                   </div>
                 </div>
@@ -158,16 +167,16 @@ export function ContactForm({ showHeader = true }: ContactFormProps) {
                   >
                     <CheckCircle className="size-12 text-foreground" aria-hidden="true" />
                   </motion.div>
-                  <h3 className="mt-4 text-xl font-semibold">Message sent!</h3>
+                  <h3 className="mt-4 text-xl font-semibold">{ui.contact.successTitle}</h3>
                   <p className="mt-2 max-w-sm text-sm text-muted-foreground">
-                    Thank you for reaching out. I&apos;ll get back to you within 24 hours.
+                    {ui.contact.successDescription}
                   </p>
                   <Button
                     variant="outline"
                     className="mt-6 rounded-full"
                     onClick={() => setIsSubmitted(false)}
                   >
-                    Send another message
+                    {ui.contact.sendAnother}
                   </Button>
                 </motion.div>
               ) : (
@@ -182,46 +191,46 @@ export function ContactForm({ showHeader = true }: ContactFormProps) {
                 >
                   <div className="grid gap-6 sm:grid-cols-2">
                     <div className="space-y-2">
-                      <Label htmlFor="name">Name</Label>
+                      <Label htmlFor="name">{ui.contact.name}</Label>
                       <Input
                         id="name"
                         name="name"
                         autoComplete="name"
-                        placeholder="John Doe"
+                        placeholder={ui.contact.namePlaceholder}
                         required
                         className="h-11 rounded-xl bg-background/50"
                       />
                     </div>
                     <div className="space-y-2">
-                      <Label htmlFor="email">Email</Label>
+                      <Label htmlFor="email">{ui.contact.email}</Label>
                       <Input
                         id="email"
                         name="email"
                         type="email"
                         autoComplete="email"
-                        placeholder="john@example.com"
+                        placeholder={ui.contact.emailPlaceholder}
                         required
                         className="h-11 rounded-xl bg-background/50"
                       />
                     </div>
                   </div>
                   <div className="space-y-2">
-                    <Label htmlFor="subject">Subject</Label>
+                    <Label htmlFor="subject">{ui.contact.subject}</Label>
                     <Input
                       id="subject"
                       name="subject"
                       autoComplete="off"
-                      placeholder="Project inquiry"
+                      placeholder={ui.contact.subjectPlaceholder}
                       required
                       className="h-11 rounded-xl bg-background/50"
                     />
                   </div>
                   <div className="space-y-2">
-                    <Label htmlFor="message">Message</Label>
+                    <Label htmlFor="message">{ui.contact.message}</Label>
                     <Textarea
                       id="message"
                       name="message"
-                      placeholder="Tell me about your project..."
+                      placeholder={ui.contact.messagePlaceholder}
                       required
                       rows={5}
                       className="resize-none rounded-xl bg-background/50"
@@ -239,12 +248,12 @@ export function ContactForm({ showHeader = true }: ContactFormProps) {
                         animate={{ opacity: [1, 0.5, 1] }}
                         transition={{ duration: 1.5, repeat: Infinity }}
                       >
-                        Sending...
+                        {ui.contact.sending}
                       </motion.span>
                     ) : (
                       <>
                         <Send className="size-4" />
-                        Send Message
+                        {ui.contact.send}
                       </>
                     )}
                   </MagneticButton>

@@ -1,4 +1,7 @@
 import type { Project } from "./types";
+import type { Locale } from "../i18n/config";
+import { getUi } from "../i18n/ui";
+import { localizeProject } from "../i18n/localize-project";
 import { getAllProjects } from "./projects";
 import { siteConfig } from "./site";
 
@@ -21,11 +24,12 @@ export function getProjectVisual(project: Project, index = 0) {
   };
 }
 
-export function formatProjectCategory(category: Project["category"]): string {
-  return category
-    .split("-")
-    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-    .join(" ");
+export function formatProjectCategory(
+  category: Project["category"],
+  locale: Locale = "en"
+): string {
+  const ui = getUi(locale);
+  return ui.categories[category] ?? category;
 }
 
 export function getProjectReadingTime(project: Project): number {
@@ -46,36 +50,54 @@ export function getProjectReadingTime(project: Project): number {
   return Math.max(2, Math.ceil(words / 200));
 }
 
-export function getProjectTimeline(project: Project): string | undefined {
+export function getProjectTimeline(
+  project: Project,
+  locale: Locale = "en"
+): string | undefined {
   if (project.timeline) return project.timeline;
   if (project.endYear) return `${project.year} — ${project.endYear}`;
-  if (project.status === "in-development") return `${project.year} — Present`;
+  if (project.status === "in-development") {
+    const present = locale === "ar" ? "حتى الآن" : "Present";
+    return `${project.year} — ${present}`;
+  }
   return String(project.year);
 }
 
-export function getProjectCaseStudyContent(project: Project) {
+export function getProjectCaseStudyContent(project: Project, locale: Locale = "en") {
+  const fallback =
+    locale === "ar"
+      ? "معالجة فجوات تشغيلية من خلال حل برمجي مركّز."
+      : "Addressing operational gaps through a focused software solution.";
+
   return {
     problem:
       project.problem ??
       project.businessProblem ??
       project.challenges[0] ??
-      "Addressing operational gaps through a focused software solution.",
+      fallback,
     businessProblem:
       project.businessProblem ??
       project.problem ??
       project.challenges[0] ??
-      "Addressing operational gaps through a focused software solution.",
+      fallback,
     architecture:
       project.architecture ??
-      `A modular ${formatProjectCategory(project.category).toLowerCase()} architecture using ${project.technologies.slice(0, 4).join(", ")}, designed for maintainability, performance, and clear separation between UI, business logic, and data layers.`,
+      (locale === "ar"
+        ? `بنية ${formatProjectCategory(project.category, locale).toLowerCase()} وحدات باستخدام ${project.technologies.slice(0, 4).join("، ")}، مصممة للصيانة والأداء وفصل واضح بين الواجهة ومنطق الأعمال وطبقة البيانات.`
+        : `A modular ${formatProjectCategory(project.category, locale).toLowerCase()} architecture using ${project.technologies.slice(0, 4).join(", ")}, designed for maintainability, performance, and clear separation between UI, business logic, and data layers.`),
     developmentProcess:
       project.developmentProcess ??
       project.solutions,
   };
 }
 
-export function getRelatedProjects(project: Project, limit = 3): Project[] {
+export function getRelatedProjects(
+  project: Project,
+  limit = 3,
+  locale: Locale = "en"
+): Project[] {
   return getAllProjects()
+    .map((item) => localizeProject(item, locale))
     .filter(
       (item) =>
         item.slug !== project.slug &&
@@ -109,15 +131,16 @@ export function getPortfolioProjectCounters() {
   };
 }
 
-export function getPortfolioStats() {
+export function getPortfolioStats(locale: Locale = "en") {
   const counters = getPortfolioProjectCounters();
+  const ui = getUi(locale);
 
   return [
-    { value: String(counters.projectsCompleted), label: "Projects Completed" },
-    { value: String(counters.businessSystems), label: "Business Systems" },
-    { value: String(counters.commercialWebsites), label: "Commercial Websites" },
-    { value: String(counters.enterprisePlatforms), label: "Enterprise Platforms" },
-    { value: String(counters.yearsLearning), label: "Years Learning" },
+    { value: String(counters.projectsCompleted), label: ui.stats.projectsCompleted },
+    { value: String(counters.businessSystems), label: ui.stats.businessSystems },
+    { value: String(counters.commercialWebsites), label: ui.stats.commercialWebsites },
+    { value: String(counters.enterprisePlatforms), label: ui.stats.enterprisePlatforms },
+    { value: String(counters.yearsLearning), label: ui.stats.yearsLearning },
   ];
 }
 

@@ -2,7 +2,6 @@
 
 import { useMemo, useState } from "react";
 import type { ProjectCategory } from "@/lib/content/types";
-import { getAllProjects } from "@/lib/content/projects";
 import {
   formatProjectCategory,
   sortProjects,
@@ -11,6 +10,7 @@ import {
 import { ProjectCard } from "@/components/projects/project-card";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
+import { useLocale } from "@/components/providers/locale-provider";
 import { cn } from "@/lib/utils";
 
 const CATEGORIES: Array<ProjectCategory | "all"> = [
@@ -32,6 +32,7 @@ export function ProjectsExplorer({
   showFeatured = true,
   showPinned = true,
 }: ProjectsExplorerProps) {
+  const { projects, locale, ui } = useLocale();
   const [query, setQuery] = useState("");
   const [category, setCategory] = useState<ProjectCategory | "all">("all");
   const [sort, setSort] = useState<ProjectSortOption>("newest");
@@ -39,7 +40,7 @@ export function ProjectsExplorer({
   const filtered = useMemo(() => {
     const normalized = query.trim().toLowerCase();
 
-    const items = getAllProjects().filter((project) => {
+    const items = projects.filter((project) => {
       const matchesCategory =
         category === "all" ? true : project.category === category;
       const matchesQuery =
@@ -48,7 +49,7 @@ export function ProjectsExplorer({
           project.title,
           project.shortDescription,
           project.technologies.join(" "),
-          formatProjectCategory(project.category),
+          formatProjectCategory(project.category, locale),
         ]
           .join(" ")
           .toLowerCase()
@@ -63,12 +64,12 @@ export function ProjectsExplorer({
     });
 
     return sortProjects(items, sort);
-  }, [category, query, sort]);
+  }, [category, locale, projects, query, sort]);
 
-  const featured = getAllProjects().filter(
+  const featured = projects.filter(
     (project) => project.featured && !project.pinned
   );
-  const pinned = getAllProjects()
+  const pinned = projects
     .filter((project) => project.pinned)
     .sort(
       (a, b) =>
@@ -87,21 +88,21 @@ export function ProjectsExplorer({
           <Input
             value={query}
             onChange={(event) => setQuery(event.target.value)}
-            placeholder="Search projects, technologies, categories..."
-            aria-label="Search projects"
+            placeholder={ui.projects.searchPlaceholder}
+            aria-label={ui.projects.searchPlaceholder}
             className="h-11 rounded-full bg-background/60 lg:max-w-md"
           />
           <label className="flex items-center gap-2 text-sm text-muted-foreground">
-            Sort
+            {ui.projects.sort}
             <select
               value={sort}
               onChange={(event) => setSort(event.target.value as ProjectSortOption)}
               className="h-10 rounded-full border border-border bg-background px-4 text-sm text-foreground outline-none"
-              aria-label="Sort projects"
+              aria-label={ui.projects.sort}
             >
-              <option value="newest">Newest</option>
-              <option value="oldest">Oldest</option>
-              <option value="title">Title</option>
+              <option value="newest">{ui.projects.sortNewest}</option>
+              <option value="oldest">{ui.projects.sortOldest}</option>
+              <option value="title">{ui.projects.sortTitle}</option>
             </select>
           </label>
         </div>
@@ -119,7 +120,7 @@ export function ProjectsExplorer({
                   : "border-border bg-background/50 text-muted-foreground hover:text-foreground"
               )}
             >
-              {item === "all" ? "All" : formatProjectCategory(item)}
+              {item === "all" ? ui.projects.all : formatProjectCategory(item, locale)}
             </button>
           ))}
         </div>
@@ -129,7 +130,7 @@ export function ProjectsExplorer({
         <section>
           <div className="mb-6 flex items-center gap-2">
             <h2 className="text-sm font-semibold uppercase tracking-wider">
-              Pinned
+              {ui.projects.pinned}
             </h2>
             <Badge variant="secondary" className="rounded-full text-[10px]">
               {pinned.length}
@@ -147,7 +148,7 @@ export function ProjectsExplorer({
         <section>
           <div className="mb-6 flex items-center gap-2">
             <h2 className="text-sm font-semibold uppercase tracking-wider">
-              Featured
+              {ui.projects.featured}
             </h2>
             <Badge variant="secondary" className="rounded-full text-[10px]">
               {featured.length}
@@ -164,15 +165,16 @@ export function ProjectsExplorer({
       <section>
         <div className="mb-6 flex items-center justify-between gap-4">
           <h2 className="text-sm font-semibold uppercase tracking-wider">
-            {query || category !== "all" ? "Results" : "More projects"}
+            {query || category !== "all" ? ui.projects.resultsHeading : ui.projects.moreProjects}
           </h2>
           <span className="text-xs text-muted-foreground">
-            {mainProjects.length} project{mainProjects.length === 1 ? "" : "s"}
+            {mainProjects.length}{" "}
+            {mainProjects.length === 1 ? ui.projects.projectCount : ui.projects.projectsCount}
           </span>
         </div>
         {mainProjects.length === 0 ? (
           <div className="glass-card rounded-2xl px-8 py-16 text-center text-sm text-muted-foreground">
-            No projects match your filters.
+            {ui.projects.noResults}
           </div>
         ) : (
           <div className="grid gap-8 md:grid-cols-2">

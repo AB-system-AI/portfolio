@@ -1,23 +1,33 @@
 import type { Metadata } from "next";
 import { createPageMetadata } from "@/lib/metadata";
+import { getLocale } from "@/lib/i18n/get-locale";
+import { getUi } from "@/lib/i18n/ui";
 import { ProjectsExplorer } from "@/components/projects/projects-explorer";
 import { ClientProjectsSection } from "@/components/sections/client-projects-section";
 import { CTASection } from "@/components/sections/cta-section";
 import { PageHero } from "@/components/layout/page-hero";
 
-export const metadata: Metadata = createPageMetadata(
-  "Projects",
-  "Personal portfolio work and business system projects — web applications, management platforms, and production-ready software built with modern technologies.",
-  "/projects"
-);
+export async function generateMetadata(): Promise<Metadata> {
+  const locale = await getLocale();
+  const ui = getUi(locale);
 
-export default function ProjectsPage() {
+  return createPageMetadata(
+    ui.metadata.projectsTitle,
+    ui.projects.pageDescription,
+    "/projects"
+  );
+}
+
+export default async function ProjectsPage() {
+  const locale = await getLocale();
+  const ui = getUi(locale);
+
   return (
     <>
       <PageHero
-        label="Portfolio"
-        title="Projects that define my craft"
-        description="A selection of personal work and business system experience — built with modern technologies, clean architecture, and a focus on real operational value."
+        label={ui.projects.pageLabel}
+        title={ui.projects.pageTitle}
+        description={ui.projects.pageDescription}
       />
       <section className="pb-24 sm:pb-32">
         <div className="mx-auto max-w-6xl px-4 sm:px-6">

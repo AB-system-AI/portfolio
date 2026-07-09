@@ -1,3 +1,6 @@
+"use client";
+
+import { useLocale } from "@/components/providers/locale-provider";
 import { ScrollReveal } from "@/components/animations/scroll-reveal";
 
 const PLACEHOLDER_LOGOS = [
@@ -10,12 +13,14 @@ const PLACEHOLDER_LOGOS = [
 ];
 
 export function ClientLogos() {
+  const { ui } = useLocale();
+
   return (
     <section className="border-y border-border/50 py-16 sm:py-20">
       <div className="mx-auto max-w-6xl px-4 sm:px-6">
         <ScrollReveal>
           <p className="text-center text-xs font-medium uppercase tracking-[0.2em] text-muted-foreground">
-            Trusted by businesses across industries
+            {ui.home.clientLogos}
           </p>
         </ScrollReveal>
         <div className="mt-10 grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-6">

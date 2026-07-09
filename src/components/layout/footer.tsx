@@ -5,8 +5,8 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 import { ArrowUpRight } from "lucide-react";
 import { GitHubIcon, LinkedInIcon, WhatsAppIcon } from "@/components/icons/brand-icons";
-import { navLinks, siteConfig, socialLinks } from "@/lib/data";
 import type { SocialPlatform } from "@/lib/content/types";
+import { useLocale } from "@/components/providers/locale-provider";
 import { Separator } from "@/components/ui/separator";
 import { AnimatedLink } from "@/components/ui/animated-link";
 import { springSoft } from "@/lib/motion";
@@ -21,6 +21,7 @@ const socialIcons: Partial<
 
 export function Footer() {
   const currentYear = new Date().getFullYear();
+  const { siteConfig, navLinks, socialLinks, ui } = useLocale();
 
   return (
     <footer className="relative border-t border-border/50 bg-muted/30">
@@ -61,7 +62,7 @@ export function Footer() {
 
           <div>
             <h3 className="text-sm font-semibold uppercase tracking-wider">
-              Navigation
+              {ui.footer.navigation}
             </h3>
             <ul className="mt-4 space-y-3">
               {navLinks.map((link) => (
@@ -80,7 +81,7 @@ export function Footer() {
 
           <div>
             <h3 className="text-sm font-semibold uppercase tracking-wider">
-              Get in Touch
+              {ui.footer.getInTouch}
             </h3>
             <div className="mt-4 space-y-3">
               <a
@@ -98,11 +99,9 @@ export function Footer() {
 
         <div className="flex flex-col items-center justify-between gap-4 sm:flex-row">
           <p className="text-xs text-muted-foreground">
-            &copy; {currentYear} {siteConfig.name}. All rights reserved.
+            &copy; {currentYear} {siteConfig.name}. {ui.footer.rights}
           </p>
-          <p className="text-xs text-muted-foreground">
-            Designed &amp; built with precision.
-          </p>
+          <p className="text-xs text-muted-foreground">{ui.footer.crafted}</p>
         </div>
       </div>
     </footer>

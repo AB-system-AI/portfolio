@@ -370,3 +370,11 @@
     height: 22mm !important;
   }
 }
+
+[dir="rtl"] body {
+  font-family: var(--font-arabic), var(--font-sans), system-ui, sans-serif;
+}
+
+[dir="rtl"] .font-heading {
+  font-family: var(--font-arabic), var(--font-serif), serif;
+}

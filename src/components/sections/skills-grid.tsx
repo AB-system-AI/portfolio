@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { getAllSkills } from "@/lib/content/skills";
+import { useLocale } from "@/components/providers/locale-provider";
 import { SectionHeader } from "@/components/animations/section-header";
 import { ScrollReveal } from "@/components/animations/scroll-reveal";
 import { PremiumCard } from "@/components/animations/premium-card";
@@ -13,10 +13,12 @@ function SkillBar({
   name,
   level,
   delay,
+  proficiencyLabel,
 }: {
   name: string;
   level: number;
   delay: number;
+  proficiencyLabel: string;
 }) {
   const prefersReducedMotion = useReducedMotion();
 
@@ -34,7 +36,7 @@ function SkillBar({
         aria-valuenow={level}
         aria-valuemin={0}
         aria-valuemax={100}
-        aria-label={`${name} proficiency`}
+        aria-label={`${name} ${proficiencyLabel}`}
       >
         {prefersReducedMotion ? (
           <div
@@ -60,7 +62,7 @@ interface SkillsGridProps {
 }
 
 export function SkillsGrid({ showHeader = true }: SkillsGridProps) {
-  const skills = getAllSkills();
+  const { skills, ui } = useLocale();
   const [activeCategory, setActiveCategory] = useState(0);
   const activeGroup = skills[activeCategory];
 
@@ -69,17 +71,15 @@ export function SkillsGrid({ showHeader = true }: SkillsGridProps) {
       <div className="mx-auto max-w-6xl px-4 sm:px-6">
         {showHeader && (
           <SectionHeader
-            label="Expertise"
-            title="Skills & technologies"
-            description="A comprehensive toolkit for building production-grade web applications, business systems, and modern full-stack solutions."
+            label={ui.skills.pageLabel}
+            title={ui.skills.pageTitle}
+            description={ui.skills.pageDescription}
           />
         )}
 
         {skills.length === 0 ? (
           <div className="glass-card rounded-2xl px-8 py-16 text-center">
-            <p className="text-sm text-muted-foreground">
-              Skills will appear here once content is added to src/lib/content/skills.ts.
-            </p>
+            <p className="text-sm text-muted-foreground">{ui.skills.empty}</p>
           </div>
         ) : (
           <>
@@ -135,6 +135,7 @@ export function SkillsGrid({ showHeader = true }: SkillsGridProps) {
                           name={skill.name}
                           level={skill.level}
                           delay={skillIndex * 0.05}
+                          proficiencyLabel={ui.skills.proficiency}
                         />
                       ))}
                     </div>
@@ -157,7 +158,7 @@ export function SkillsGrid({ showHeader = true }: SkillsGridProps) {
                       {group.category}
                     </h3>
                     <p className="mt-2 text-xs text-muted-foreground">
-                      {group.items.length} skills
+                      {group.items.length} {ui.skills.skillsCount}
                     </p>
                   </PremiumCard>
                 </ScrollReveal>

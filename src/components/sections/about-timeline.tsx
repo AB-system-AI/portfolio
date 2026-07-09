@@ -1,14 +1,13 @@
 "use client";
 
 import { motion } from "framer-motion";
-import {
-  formatExperiencePeriod,
-  getAllExperience,
-} from "@/lib/content/experience";
+import { formatExperiencePeriod } from "@/lib/content/experience";
+import { useLocale } from "@/components/providers/locale-provider";
 import { SectionHeader } from "@/components/animations/section-header";
 import { ScrollReveal } from "@/components/animations/scroll-reveal";
 import { Badge } from "@/components/ui/badge";
 import type { Experience } from "@/lib/content/types";
+import type { UiDictionary } from "@/lib/i18n/ui";
 
 function ExperienceList({
   title,
@@ -53,12 +52,14 @@ function ExperienceList({
 function ExperienceCard({
   item,
   align = "left",
+  labels,
 }: {
   item: Experience;
   align?: "left" | "right";
+  labels: UiDictionary["about"];
 }) {
   return (
-                    <div className="glass-card ml-8 rounded-2xl p-6 text-left transition-[border-color,box-shadow] duration-500 hover:border-border hover:shadow-xl hover:shadow-black/5 sm:ml-0 dark:hover:shadow-black/20">
+    <div className="glass-card ml-8 rounded-2xl p-6 text-left transition-[border-color,box-shadow] duration-500 hover:border-border hover:shadow-xl hover:shadow-black/5 sm:ml-0 dark:hover:shadow-black/20">
       <div
         className={`flex flex-wrap items-center gap-2 ${
           align === "right" ? "sm:justify-end" : ""
@@ -82,12 +83,12 @@ function ExperienceCard({
       </p>
 
       <ExperienceList
-        title="Key responsibilities"
+        title={labels.responsibilities}
         items={item.responsibilities}
         align={align}
       />
       <ExperienceList
-        title="Key achievements"
+        title={labels.achievements}
         items={item.achievements}
         align={align}
       />
@@ -95,7 +96,7 @@ function ExperienceCard({
       {item.businessImpact && (
         <div className={align === "right" ? "sm:text-right" : ""}>
           <p className="mt-5 text-xs font-semibold uppercase tracking-wider">
-            Business impact
+            {labels.businessImpact}
           </p>
           <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
             {item.businessImpact}
@@ -106,7 +107,7 @@ function ExperienceCard({
       {item.technologies.length > 0 && (
         <div className={align === "right" ? "sm:text-right" : ""}>
           <p className="mt-5 text-xs font-semibold uppercase tracking-wider">
-            Technologies
+            {labels.technologies}
           </p>
           <div
             className={`mt-3 flex flex-wrap gap-2 ${
@@ -130,19 +131,19 @@ function ExperienceCard({
 }
 
 export function AboutTimeline() {
-  const experience = getAllExperience();
+  const { experience, ui } = useLocale();
 
   if (experience.length === 0) {
     return (
       <section className="py-24 sm:py-32">
         <div className="mx-auto max-w-6xl px-4 sm:px-6">
           <SectionHeader
-            label="Experience"
-            title="Professional experience"
-            description="Professional experience will appear here once content is added to src/lib/content/experience.ts."
+            label={ui.about.experience}
+            title={ui.about.experienceTitle}
+            description={ui.about.noExperience}
           />
           <div className="glass-card rounded-2xl px-8 py-16 text-center">
-            <p className="text-sm text-muted-foreground">No experience entries yet.</p>
+            <p className="text-sm text-muted-foreground">{ui.about.noExperience}</p>
           </div>
         </div>
       </section>
@@ -153,9 +154,8 @@ export function AboutTimeline() {
     <section className="py-24 sm:py-32">
       <div className="mx-auto max-w-6xl px-4 sm:px-6">
         <SectionHeader
-          label="Experience"
-          title="Professional experience"
-          description="Building and maintaining full-stack applications and business systems — from development and deployment through ongoing client support."
+          label={ui.about.experience}
+          title={ui.about.experienceTitle}
         />
 
         <div className="relative">
@@ -192,7 +192,7 @@ export function AboutTimeline() {
                         index % 2 === 0 ? "sm:pr-12" : "sm:pl-12"
                       }`}
                     >
-                      <ExperienceCard item={item} align={align} />
+                      <ExperienceCard item={item} align={align} labels={ui.about} />
                     </div>
                   </li>
                 </ScrollReveal>

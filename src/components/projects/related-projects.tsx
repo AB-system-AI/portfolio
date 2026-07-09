@@ -1,13 +1,18 @@
+"use client";
+
 import Link from "next/link";
 import type { Project } from "@/lib/content/types";
 import { ProjectCard } from "./project-card";
 import { ScrollReveal } from "@/components/animations/scroll-reveal";
+import { useLocale } from "@/components/providers/locale-provider";
 
 interface RelatedProjectsProps {
   projects: Project[];
 }
 
 export function RelatedProjects({ projects }: RelatedProjectsProps) {
+  const { ui } = useLocale();
+
   if (projects.length === 0) return null;
 
   return (
@@ -15,13 +20,13 @@ export function RelatedProjects({ projects }: RelatedProjectsProps) {
       <ScrollReveal>
         <div className="mb-8 flex items-center justify-between gap-4">
           <h2 className="font-heading text-2xl font-semibold tracking-tight">
-            Related projects
+            {ui.projects.related}
           </h2>
           <Link
             href="/projects"
             className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
           >
-            View all
+            {ui.projects.viewAll}
           </Link>
         </div>
       </ScrollReveal>

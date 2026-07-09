@@ -1,3 +1,5 @@
+"use client";
+
 import Link from "next/link";
 import type { Project } from "@/lib/content/types";
 import {
@@ -15,24 +17,12 @@ import { RelatedProjects } from "./related-projects";
 import { Badge } from "@/components/ui/badge";
 import { ScrollReveal } from "@/components/animations/scroll-reveal";
 import { CTASection } from "@/components/sections/cta-section";
+import { useLocale } from "@/components/providers/locale-provider";
 import { Clock, Hammer, Star } from "lucide-react";
 
 interface ProjectDetailProps {
   project: Project;
 }
-
-const TOC_ITEMS = [
-  { id: "overview", label: "Overview" },
-  { id: "problem", label: "Problem" },
-  { id: "solution", label: "Solution" },
-  { id: "architecture", label: "Architecture" },
-  { id: "technologies", label: "Technologies" },
-  { id: "features", label: "Features" },
-  { id: "challenges", label: "Challenges" },
-  { id: "results", label: "Results" },
-  { id: "gallery", label: "Gallery" },
-  { id: "links", label: "Links" },
-];
 
 function CaseStudySection({
   id,
@@ -56,11 +46,25 @@ function CaseStudySection({
 }
 
 export function ProjectDetail({ project }: ProjectDetailProps) {
-  const caseStudy = getProjectCaseStudyContent(project);
-  const related = getRelatedProjects(project);
+  const { locale, ui } = useLocale();
+  const caseStudy = getProjectCaseStudyContent(project, locale);
+  const related = getRelatedProjects(project, 3, locale);
   const readingTime = getProjectReadingTime(project);
-  const timeline = getProjectTimeline(project);
+  const timeline = getProjectTimeline(project, locale);
   const isBuilding = project.status === "in-development";
+
+  const tocItems = [
+    { id: "overview", label: ui.projects.overview },
+    { id: "problem", label: ui.projects.problem },
+    { id: "solution", label: ui.projects.solution },
+    { id: "architecture", label: ui.projects.architecture },
+    { id: "technologies", label: ui.projects.technologies },
+    { id: "features", label: ui.projects.features },
+    { id: "challenges", label: ui.projects.challenges },
+    { id: "results", label: ui.projects.results },
+    { id: "gallery", label: ui.projects.gallery },
+    { id: "links", label: ui.projects.links },
+  ];
 
   return (
     <>
@@ -70,25 +74,25 @@ export function ProjectDetail({ project }: ProjectDetailProps) {
           <ScrollReveal>
             <div className="flex flex-wrap items-center gap-3">
               <Badge variant="secondary" className="rounded-full">
-                {formatProjectCategory(project.category)}
+                {formatProjectCategory(project.category, locale)}
               </Badge>
               {timeline && (
                 <span className="text-sm text-muted-foreground">{timeline}</span>
               )}
               <span className="inline-flex items-center gap-1 text-sm text-muted-foreground">
                 <Clock className="size-3.5" />
-                {readingTime} min read
+                {readingTime} {ui.featured.minRead}
               </span>
               {isBuilding && (
                 <Badge variant="outline" className="rounded-full">
-                  <Hammer className="mr-1 size-3" />
-                  Currently Building
+                  <Hammer className="me-1 size-3" />
+                  {ui.projects.currentlyBuilding}
                 </Badge>
               )}
               {project.featured && (
                 <Badge variant="outline" className="rounded-full">
-                  <Star className="mr-1 size-3" />
-                  Featured
+                  <Star className="me-1 size-3" />
+                  {ui.projects.featuredBadge}
                 </Badge>
               )}
             </div>
@@ -113,10 +117,10 @@ export function ProjectDetail({ project }: ProjectDetailProps) {
 
       <section className="pb-24 sm:pb-32">
         <div className="mx-auto grid max-w-6xl gap-10 px-4 sm:px-6 xl:grid-cols-[220px_minmax(0,1fr)]">
-          <ProjectTableOfContents items={TOC_ITEMS} />
+          <ProjectTableOfContents items={tocItems} />
 
           <div className="space-y-16">
-            <CaseStudySection id="overview" title="Overview">
+            <CaseStudySection id="overview" title={ui.projects.overview}>
               <div className="space-y-4 text-base leading-relaxed text-muted-foreground">
                 {project.fullDescription.split("\n\n").map((paragraph, index) => (
                   <p key={index}>{paragraph}</p>
@@ -124,27 +128,27 @@ export function ProjectDetail({ project }: ProjectDetailProps) {
               </div>
             </CaseStudySection>
 
-            <CaseStudySection id="problem" title="Problem">
+            <CaseStudySection id="problem" title={ui.projects.problem}>
               <p className="text-base leading-relaxed text-muted-foreground">
                 {caseStudy.problem}
               </p>
             </CaseStudySection>
 
-            <CaseStudySection id="solution" title="Solution">
+            <CaseStudySection id="solution" title={ui.projects.solution}>
               <ProjectCaseStudyList title="" items={project.solutions} />
             </CaseStudySection>
 
-            <CaseStudySection id="architecture" title="Architecture">
+            <CaseStudySection id="architecture" title={ui.projects.architecture}>
               <p className="text-base leading-relaxed text-muted-foreground">
                 {caseStudy.architecture}
               </p>
             </CaseStudySection>
 
-            <CaseStudySection id="features" title="Features">
+            <CaseStudySection id="features" title={ui.projects.features}>
               <ProjectCaseStudyList title="" items={project.features} />
             </CaseStudySection>
 
-            <CaseStudySection id="technologies" title="Technologies">
+            <CaseStudySection id="technologies" title={ui.projects.technologies}>
               <div className="flex flex-wrap gap-2">
                 {project.technologies.map((tech) => (
                   <Badge
@@ -158,11 +162,11 @@ export function ProjectDetail({ project }: ProjectDetailProps) {
               </div>
             </CaseStudySection>
 
-            <CaseStudySection id="challenges" title="Challenges">
+            <CaseStudySection id="challenges" title={ui.projects.challenges}>
               <ProjectCaseStudyList title="" items={project.challenges} />
             </CaseStudySection>
 
-            <CaseStudySection id="results" title="Results">
+            <CaseStudySection id="results" title={ui.projects.results}>
               <ProjectCaseStudyList title="" items={project.results} />
             </CaseStudySection>
 
@@ -173,7 +177,7 @@ export function ProjectDetail({ project }: ProjectDetailProps) {
                 href="/projects"
                 className="text-sm font-medium text-muted-foreground underline-offset-4 transition-colors hover:text-foreground hover:underline"
               >
-                ← Back to all projects
+                {ui.projects.backToAll}
               </Link>
             </ScrollReveal>
           </div>

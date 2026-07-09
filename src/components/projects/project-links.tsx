@@ -1,7 +1,10 @@
+"use client";
+
 import { ExternalLink } from "lucide-react";
 import { GitHubIcon } from "@/components/icons/brand-icons";
 import type { Project } from "@/lib/content/types";
 import { ExternalLinkButton } from "@/components/ui/external-link-button";
+import { useLocale } from "@/components/providers/locale-provider";
 
 interface ProjectLinksProps {
   project: Project;
@@ -14,6 +17,8 @@ export function ProjectLinks({
   size = "sm",
   className,
 }: ProjectLinksProps) {
+  const { ui } = useLocale();
+
   if (!project.liveDemo && !project.github) return null;
 
   return (
@@ -26,7 +31,7 @@ export function ProjectLinks({
           ariaLabel={`View live demo for ${project.title} (opens in new tab)`}
         >
           <ExternalLink className="size-3.5" />
-          Live Demo
+          {ui.projects.liveDemo}
         </ExternalLinkButton>
       )}
       {project.github && (
@@ -38,7 +43,7 @@ export function ProjectLinks({
           ariaLabel={`View ${project.title} source code on GitHub (opens in new tab)`}
         >
           <GitHubIcon className="size-3.5" />
-          GitHub
+          {ui.projects.github}
         </ExternalLinkButton>
       )}
     </div>

@@ -1,14 +1,22 @@
 import type { Metadata } from "next";
 import { createPageMetadata } from "@/lib/metadata";
-import { siteConfig } from "@/lib/data";
+import { getLocale } from "@/lib/i18n/get-locale";
+import { getSiteConfig } from "@/lib/i18n/localized-content";
+import { getUi } from "@/lib/i18n/ui";
 import { ResumeDocument } from "@/components/resume/resume-document";
 import { ResumePrintActions } from "@/components/resume/resume-print-actions";
 
-export const metadata: Metadata = createPageMetadata(
-  "Resume",
-  `${siteConfig.name} — ATS-friendly resume for ${siteConfig.title}.`,
-  "/resume"
-);
+export async function generateMetadata(): Promise<Metadata> {
+  const locale = await getLocale();
+  const siteConfig = getSiteConfig(locale);
+  const ui = getUi(locale);
+
+  return createPageMetadata(
+    ui.metadata.resumeTitle,
+    `${siteConfig.name} — ${ui.resume.pageDescription}`,
+    "/resume"
+  );
+}
 
 export default function ResumePage() {
   return (
