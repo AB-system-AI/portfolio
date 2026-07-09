@@ -12,11 +12,17 @@ export function JsonLd() {
         jobTitle: siteConfig.title,
         description: siteConfig.tagline,
         email: siteConfig.email,
+        telephone: siteConfig.phone.replace(/\s/g, ""),
         url: siteUrl,
         address: {
           "@type": "PostalAddress",
           addressLocality: siteConfig.location,
         },
+        alumniOf: {
+          "@type": "CollegeOrUniversity",
+          name: siteConfig.education.institution,
+        },
+        knowsLanguage: siteConfig.englishLevel,
         sameAs: socialLinks.map((link) => link.url),
       },
       {

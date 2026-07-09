@@ -1,7 +1,7 @@
 import type { ComponentType } from "react";
 import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
-import { GitHubIcon, LinkedInIcon, XIcon } from "@/components/icons/brand-icons";
+import { GitHubIcon, LinkedInIcon, WhatsAppIcon } from "@/components/icons/brand-icons";
 import { navLinks, siteConfig, socialLinks } from "@/lib/data";
 import type { SocialPlatform } from "@/lib/content/types";
 import { Separator } from "@/components/ui/separator";
@@ -11,7 +11,7 @@ const socialIcons: Partial<
 > = {
   github: GitHubIcon,
   linkedin: LinkedInIcon,
-  twitter: XIcon,
+  whatsapp: WhatsAppIcon,
 };
 
 export function Footer() {

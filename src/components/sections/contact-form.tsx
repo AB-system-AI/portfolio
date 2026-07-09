@@ -2,7 +2,8 @@
 
 import { useState, type FormEvent } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Send, CheckCircle, Mail, MapPin } from "lucide-react";
+import { Send, CheckCircle, Mail, MapPin, Phone } from "lucide-react";
+import { WhatsAppIcon } from "@/components/icons/brand-icons";
 import { siteConfig } from "@/lib/data";
 import { SectionHeader } from "@/components/animations/section-header";
 import { ScrollReveal } from "@/components/animations/scroll-reveal";
@@ -44,9 +45,7 @@ export function ContactForm({ showHeader = true }: ContactFormProps) {
               <div>
                 <h2 className="text-lg font-semibold">Get in touch</h2>
                 <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
-                  I&apos;m currently available for freelance projects and
-                  full-time opportunities. Let&apos;s create something
-                  extraordinary together.
+                  {siteConfig.availability}
                 </p>
               </div>
 
@@ -62,6 +61,36 @@ export function ContactForm({ showHeader = true }: ContactFormProps) {
                     <p className="text-xs text-muted-foreground">Email</p>
                     <p className="text-sm font-medium group-hover:underline">
                       {siteConfig.email}
+                    </p>
+                  </div>
+                </a>
+                <a
+                  href={`tel:${siteConfig.phone.replace(/\s/g, "")}`}
+                  className="glass-card group flex items-center gap-4 rounded-xl p-4 transition-colors hover:border-border hover:bg-muted/50"
+                >
+                  <div className="flex size-10 items-center justify-center rounded-lg bg-muted">
+                    <Phone className="size-4" aria-hidden="true" />
+                  </div>
+                  <div>
+                    <p className="text-xs text-muted-foreground">Phone</p>
+                    <p className="text-sm font-medium group-hover:underline">
+                      {siteConfig.phone}
+                    </p>
+                  </div>
+                </a>
+                <a
+                  href={siteConfig.whatsapp}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="glass-card group flex items-center gap-4 rounded-xl p-4 transition-colors hover:border-border hover:bg-muted/50"
+                >
+                  <div className="flex size-10 items-center justify-center rounded-lg bg-muted">
+                    <WhatsAppIcon className="size-4" />
+                  </div>
+                  <div>
+                    <p className="text-xs text-muted-foreground">WhatsApp</p>
+                    <p className="text-sm font-medium group-hover:underline">
+                      Message on WhatsApp
                     </p>
                   </div>
                 </a>

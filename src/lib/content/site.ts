@@ -8,28 +8,37 @@ import type {
 
 export const siteConfig: SiteConfig = {
   name: "Abdelrahman Mohamed",
-  title: "Full-Stack Developer",
-  tagline: "Crafting digital experiences with precision and purpose.",
-  email: "hello@abdelrahman.dev",
-  location: "Cairo, Egypt",
-  twitterHandle: "@abdelrahman",
+  title: "Full-Stack Web Developer | AI & Business Systems Developer",
+  tagline:
+    "Building scalable web applications, business systems, and AI-powered solutions.",
+  email: "bodammohamed204@gmail.com",
+  phone: "+20 1284525538",
+  whatsapp:
+    "https://wa.me/201284525538?text=Hello%20Abdelrahman,%20I%20found%20your%20portfolio%20and%20I'd%20like%20to%20discuss%20a%20project.",
+  location: "Alexandria, Egypt",
+  availability: "Available for Freelance & Remote Work",
+  education: {
+    institution: "Faculty of Computer and Data Science",
+    expectedGraduation: 2029,
+  },
+  englishLevel: "B2",
 };
 
 export const socialLinks: SocialLink[] = [
   {
     platform: "github",
     label: "GitHub",
-    url: "https://github.com/abdelrahman",
+    url: "https://github.com/AB-system-AI",
   },
   {
     platform: "linkedin",
     label: "LinkedIn",
-    url: "https://linkedin.com/in/abdelrahman",
+    url: "https://www.linkedin.com/in/abdo-mohamed-611a5b41b",
   },
   {
-    platform: "twitter",
-    label: "X",
-    url: "https://twitter.com/abdelrahman",
+    platform: "whatsapp",
+    label: "WhatsApp",
+    url: "https://wa.me/201284525538?text=Hello%20Abdelrahman,%20I%20found%20your%20portfolio%20and%20I'd%20like%20to%20discuss%20a%20project.",
   },
 ];
 
@@ -42,16 +51,11 @@ export const navLinks: NavLink[] = [
   { href: "/contact", label: "Contact" },
 ];
 
-export const stats: Stat[] = [
-  { value: "—", label: "Years Experience" },
-  { value: "—", label: "Projects Delivered" },
-  { value: "—", label: "Happy Clients" },
-  { value: "—", label: "Client Satisfaction" },
-];
+export const stats: Stat[] = [];
 
 export const focusAreas: FocusArea[] = [
-  { value: "Full-Stack", label: "Development" },
-  { value: "UI/UX", label: "Design Systems" },
-  { value: "Cloud", label: "Architecture" },
-  { value: "AI", label: "Integration" },
+  { value: "Web Apps", label: "Scalable Applications" },
+  { value: "Business", label: "Systems Development" },
+  { value: "AI", label: "Powered Solutions" },
+  { value: "Remote", label: "Freelance & Remote Work" },
 ];

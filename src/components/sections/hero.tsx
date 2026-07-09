@@ -43,7 +43,7 @@ export function Hero() {
               <span className="relative flex size-2">
                 <span className="relative inline-flex size-2 rounded-full bg-foreground/70" />
               </span>
-              Available for new projects
+              {siteConfig.availability}
             </span>
           </motion.div>
 
@@ -62,9 +62,7 @@ export function Hero() {
             variants={itemVariants}
             className="mt-8 max-w-xl text-base leading-relaxed text-muted-foreground sm:text-lg md:text-xl"
           >
-            I&apos;m {siteConfig.name}, a {siteConfig.title.toLowerCase()} who
-            transforms complex ideas into elegant, high-performance web
-            applications.
+            I&apos;m {siteConfig.name} — {siteConfig.tagline}
           </motion.p>
 
           <motion.div
@@ -86,6 +84,7 @@ export function Hero() {
             </LinkButton>
           </motion.div>
 
+          {stats.length > 0 && (
           <motion.div
             variants={itemVariants}
             className="mt-16 grid grid-cols-2 gap-6 border-t border-border/50 pt-8 sm:mt-20 sm:grid-cols-4 sm:gap-8 sm:pt-10"
@@ -101,6 +100,7 @@ export function Hero() {
               </div>
             ))}
           </motion.div>
+          )}
         </motion.div>
       </div>
 

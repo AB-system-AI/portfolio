@@ -7,8 +7,16 @@ export interface SiteConfig {
   title: string;
   tagline: string;
   email: string;
+  phone: string;
+  whatsapp: string;
   location: string;
-  twitterHandle: string;
+  availability: string;
+  education: {
+    institution: string;
+    expectedGraduation: number;
+  };
+  englishLevel: string;
+  resumeUrl?: string;
 }
 
 export interface NavLink {
@@ -19,6 +27,7 @@ export interface NavLink {
 export type SocialPlatform =
   | "github"
   | "linkedin"
+  | "whatsapp"
   | "twitter"
   | "email"
   | "dribbble"
@@ -39,6 +48,21 @@ export interface Stat {
 export interface FocusArea {
   value: string;
   label: string;
+}
+
+export interface Language {
+  name: string;
+  level: string;
+}
+
+export interface About {
+  heroTitle: string;
+  summary: string;
+  background: string;
+  specializations: string[];
+  lookingFor: string;
+  differentiators: string[];
+  languages: Language[];
 }
 
 // ---------------------------------------------------------------------------

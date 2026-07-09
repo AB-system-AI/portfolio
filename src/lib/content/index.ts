@@ -30,3 +30,5 @@ export {
 } from "./testimonials";
 
 export { certificates, getAllCertificates } from "./certificates";
+
+export { about, getAbout } from "./about";

@@ -1,3 +1,4 @@
+import { getAbout } from "@/lib/content/about";
 import { ArrowRight } from "lucide-react";
 import { Hero } from "@/components/sections/hero";
 import { ProjectsGrid } from "@/components/sections/projects-grid";
@@ -7,6 +8,8 @@ import { ScrollReveal } from "@/components/animations/scroll-reveal";
 import { LinkButton } from "@/components/ui/link-button";
 
 export default function HomePage() {
+  const about = getAbout();
+
   return (
     <>
       <Hero />
@@ -21,15 +24,12 @@ export default function HomePage() {
                   About
                 </span>
                 <h2 className="font-heading mt-4 text-balance text-3xl font-semibold tracking-tight sm:text-4xl">
-                  Passionate about crafting exceptional digital products
+                  {about.heroTitle}
                 </h2>
               </div>
               <div>
                 <p className="text-base leading-relaxed text-muted-foreground sm:text-lg">
-                  With over 8 years of experience in full-stack development, I
-                  specialize in building scalable web applications that combine
-                  beautiful design with robust engineering. Every project is an
-                  opportunity to push boundaries and deliver excellence.
+                  {about.summary}
                 </p>
                 <LinkButton
                   href="/about"

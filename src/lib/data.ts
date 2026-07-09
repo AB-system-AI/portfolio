@@ -15,6 +15,8 @@ export {
   services,
   testimonials,
   certificates,
+  about,
+  getAbout,
   getAllProjects,
   getFeaturedProjects,
   getProjectBySlug,
