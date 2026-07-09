@@ -8,9 +8,9 @@ import type {
 
 export const siteConfig: SiteConfig = {
   name: "Abdelrahman Mohamed",
-  title: "Full-Stack Web Developer | AI & Business Systems Developer",
+  title: "Full-Stack Web Developer | Business Systems Developer",
   tagline:
-    "Building scalable web applications, business systems, and AI-powered solutions.",
+    "Building scalable web applications, business systems, and modern software solutions.",
   email: "bodammohamed204@gmail.com",
   phone: "+20 1284525538",
   whatsapp:
@@ -56,6 +56,6 @@ export const stats: Stat[] = [];
 export const focusAreas: FocusArea[] = [
   { value: "Web Apps", label: "Scalable Applications" },
   { value: "Business", label: "Systems Development" },
-  { value: "AI", label: "Powered Solutions" },
+  { value: "Cloud", label: "Deployment & Hosting" },
   { value: "Remote", label: "Freelance & Remote Work" },
 ];

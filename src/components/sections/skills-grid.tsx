@@ -67,7 +67,7 @@ export function SkillsGrid({ showHeader = true }: SkillsGridProps) {
           <SectionHeader
             label="Expertise"
             title="Skills & technologies"
-            description="A comprehensive toolkit honed over years of building production-grade applications across the full stack."
+            description="A comprehensive toolkit for building production-grade web applications, business systems, and modern full-stack solutions."
           />
         )}
 

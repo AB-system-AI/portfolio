@@ -16,7 +16,7 @@ export default function SkillsPage() {
       <PageHero
         label="Expertise"
         title="Tools of the trade"
-        description="A deep toolkit spanning frontend, backend, DevOps, and design — continuously refined through years of hands-on experience."
+        description="A practical toolkit spanning frontend, backend, databases, cloud deployment, and development tools — refined through hands-on project work."
       />
       <SkillsGrid showHeader={false} />
       <CTASection />

@@ -6,7 +6,7 @@ import { PageHero } from "@/components/layout/page-hero";
 
 export const metadata: Metadata = createPageMetadata(
   "Services",
-  "Professional web development, mobile apps, UI/UX design, cloud architecture, AI integration, and technical consulting services.",
+  "Professional web development, mobile apps, UI/UX design, cloud architecture, and technical consulting services.",
   "/services"
 );
 

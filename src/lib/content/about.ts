@@ -3,15 +3,14 @@ import type { About } from "./types";
 export const about: About = {
   heroTitle: "Building software that solves real business problems",
   summary:
-    "I'm a Full-Stack Web Developer and Computer & Data Science student with a passion for building modern web applications, business systems, and AI-powered solutions. I enjoy transforming ideas into fast, scalable, and user-friendly products using modern technologies and clean software architecture. My goal is to deliver software that solves real business problems while providing an excellent user experience.",
+    "I'm a Full-Stack Web Developer and Computer & Data Science student with a passion for building modern web applications, business systems, and scalable software solutions. I enjoy transforming ideas into fast, scalable, and user-friendly products using modern technologies and clean software architecture. My goal is to deliver software that solves real business problems while providing an excellent user experience.",
   background:
-    "I'm currently studying at the Faculty of Computer and Data Science while continuously improving my practical skills through real-world projects. Alongside my academic studies, I focus on mastering modern web development, backend systems, cloud deployment, databases, and AI integration by building complete production-ready applications.",
+    "I'm currently studying at the Faculty of Computer and Data Science while continuously improving my practical skills through real-world projects. Alongside my academic studies, I focus on mastering modern web development, backend systems, cloud deployment, databases, and API development by building complete production-ready applications.",
   specializations: [
     "Full-Stack Web Development",
     "Business Management Systems",
     "POS & ERP Solutions",
     "Dashboard & Admin Panels",
-    "AI Integration",
     "REST APIs",
     "Database Design",
     "Performance Optimization",
