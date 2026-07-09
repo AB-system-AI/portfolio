@@ -5,6 +5,7 @@ import { ArrowRight, Mail } from "lucide-react";
 import { siteConfig } from "@/lib/data";
 import { getPortfolioStats } from "@/lib/content/project-utils";
 import { MagneticLinkButton } from "@/components/ui/magnetic-button";
+import { AvailabilityBadge } from "@/components/ui/availability-badge";
 import { AnimatedBackground } from "@/components/animations/animated-background";
 import { TextReveal } from "@/components/animations/text-reveal";
 import { TypingText } from "@/components/animations/typing-text";
@@ -45,12 +46,7 @@ export function Hero() {
           className="max-w-4xl"
         >
           <motion.div variants={itemVariants}>
-            <span className="inline-flex items-center gap-2 rounded-full border border-border/60 bg-muted/50 px-4 py-1.5 text-xs font-medium tracking-wide text-muted-foreground backdrop-blur-sm">
-              <span className="relative flex size-2">
-                <span className="relative inline-flex size-2 rounded-full bg-foreground/70" />
-              </span>
-              {siteConfig.availability}
-            </span>
+            <AvailabilityBadge label={siteConfig.availability} />
           </motion.div>
 
           <motion.h1
