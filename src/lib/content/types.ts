@@ -111,10 +111,17 @@ export interface Project {
 
 export interface Experience {
   id: string;
-  year: string;
-  role: string;
   company: string;
-  description: string;
+  role: string;
+  employmentType?: string;
+  startDate: string;
+  endDate: string;
+  location: string;
+  summary: string;
+  responsibilities: string[];
+  technologies: string[];
+  achievements: string[];
+  businessImpact?: string;
 }
 
 // ---------------------------------------------------------------------------
