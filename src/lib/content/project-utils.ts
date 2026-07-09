@@ -1,7 +1,6 @@
 import type { Project } from "./types";
 import { getAllProjects } from "./projects";
-import { getAllServices } from "./services";
-import { getAllSkills } from "./skills";
+import { siteConfig } from "./site";
 
 export const DEFAULT_PROJECT_VISUALS = [
   { gradient: "from-zinc-900 via-zinc-800 to-zinc-950", accent: "#fafafa" },
@@ -34,6 +33,9 @@ export function getProjectReadingTime(project: Project): number {
     project.title,
     project.shortDescription,
     project.fullDescription,
+    project.problem,
+    project.businessProblem,
+    project.architecture,
     ...project.features,
     ...project.challenges,
     ...project.solutions,
@@ -44,10 +46,23 @@ export function getProjectReadingTime(project: Project): number {
   return Math.max(2, Math.ceil(words / 200));
 }
 
+export function getProjectTimeline(project: Project): string | undefined {
+  if (project.timeline) return project.timeline;
+  if (project.endYear) return `${project.year} — ${project.endYear}`;
+  if (project.status === "in-development") return `${project.year} — Present`;
+  return String(project.year);
+}
+
 export function getProjectCaseStudyContent(project: Project) {
   return {
+    problem:
+      project.problem ??
+      project.businessProblem ??
+      project.challenges[0] ??
+      "Addressing operational gaps through a focused software solution.",
     businessProblem:
       project.businessProblem ??
+      project.problem ??
       project.challenges[0] ??
       "Addressing operational gaps through a focused software solution.",
     architecture:
@@ -69,19 +84,40 @@ export function getRelatedProjects(project: Project, limit = 3): Project[] {
     .slice(0, limit);
 }
 
-export function getPortfolioStats() {
+export function getPortfolioProjectCounters() {
   const projects = getAllProjects();
-  const services = getAllServices();
-  const skillCount = getAllSkills().reduce(
-    (total, group) => total + group.items.length,
-    0
+  const currentYear = new Date().getFullYear();
+  const yearsLearning = Math.max(
+    1,
+    currentYear - siteConfig.learningSince + 1
   );
 
+  return {
+    projectsCompleted: projects.filter(
+      (project) => project.status !== "in-development"
+    ).length,
+    businessSystems: projects.filter(
+      (project) => project.segment === "business-system"
+    ).length,
+    commercialWebsites: projects.filter(
+      (project) => project.segment === "commercial-website"
+    ).length,
+    enterprisePlatforms: projects.filter(
+      (project) => project.segment === "enterprise-platform"
+    ).length,
+    yearsLearning,
+  };
+}
+
+export function getPortfolioStats() {
+  const counters = getPortfolioProjectCounters();
+
   return [
-    { value: String(projects.length), label: "Projects Delivered" },
-    { value: String(services.length), label: "Service Areas" },
-    { value: `${skillCount}+`, label: "Technologies" },
-    { value: String(projects.filter((p) => p.featured).length), label: "Featured Builds" },
+    { value: String(counters.projectsCompleted), label: "Projects Completed" },
+    { value: String(counters.businessSystems), label: "Business Systems" },
+    { value: String(counters.commercialWebsites), label: "Commercial Websites" },
+    { value: String(counters.enterprisePlatforms), label: "Enterprise Platforms" },
+    { value: String(counters.yearsLearning), label: "Years Learning" },
   ];
 }
 

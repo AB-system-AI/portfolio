@@ -12,10 +12,21 @@ export {
   projects,
   getAllProjects,
   getFeaturedProjects,
+  getClientProjects,
+  getPersonalProjects,
   getProjectBySlug,
   getAllProjectSlugs,
   getProjectsByCategory,
 } from "./projects";
+
+export {
+  getPortfolioStats,
+  getPortfolioProjectCounters,
+  getProjectTimeline,
+  getProjectCaseStudyContent,
+  formatProjectCategory,
+  sortProjects,
+} from "./project-utils";
 
 export { experience, getAllExperience } from "./experience";
 

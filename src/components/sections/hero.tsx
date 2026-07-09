@@ -94,7 +94,7 @@ export function Hero() {
 
           <motion.div
             variants={itemVariants}
-            className="mt-16 grid grid-cols-2 gap-6 border-t border-border/50 pt-8 sm:mt-20 sm:grid-cols-4 sm:gap-8 sm:pt-10"
+            className="mt-16 grid grid-cols-2 gap-6 border-t border-border/50 pt-8 sm:mt-20 sm:grid-cols-3 lg:grid-cols-5 sm:gap-8 sm:pt-10"
           >
             {stats.map((stat, index) => (
               <StatsCounter

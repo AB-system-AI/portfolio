@@ -1,4 +1,5 @@
 import type { Project } from "./types";
+import { additionalProjects } from "./projects-additional";
 
 export const projects: Project[] = [
   {
@@ -17,6 +18,7 @@ export const projects: Project[] = [
       "shadcn/ui",
     ],
     category: "web-app",
+    segment: "personal",
     featured: true,
     pinned: true,
     images: [],
@@ -63,6 +65,7 @@ export const projects: Project[] = [
       "PostgreSQL",
     ],
     category: "saas",
+    segment: "business-system",
     featured: true,
     images: [],
     year: 2026,
@@ -108,6 +111,7 @@ export const projects: Project[] = [
       "PostgreSQL",
     ],
     category: "web-app",
+    segment: "business-system",
     featured: true,
     images: [],
     year: 2026,
@@ -153,6 +157,7 @@ export const projects: Project[] = [
       "PostgreSQL",
     ],
     category: "e-commerce",
+    segment: "commercial-website",
     featured: false,
     images: [],
     year: 2026,
@@ -197,6 +202,7 @@ export const projects: Project[] = [
       "Responsive Design",
     ],
     category: "web-app",
+    segment: "commercial-website",
     featured: false,
     images: [],
     year: 2025,
@@ -240,6 +246,7 @@ export const projects: Project[] = [
       "Tailwind CSS",
     ],
     category: "web-app",
+    segment: "personal",
     featured: false,
     images: [],
     year: 2025,
@@ -288,6 +295,7 @@ export const projects: Project[] = [
       "Vercel",
     ],
     category: "saas",
+    segment: "enterprise-platform",
     featured: true,
     pinned: true,
     images: [],
@@ -325,6 +333,7 @@ export const projects: Project[] = [
       "Strengthened platform usability and development workflow through continuous improvements.",
     ],
   },
+  ...additionalProjects,
 ];
 
 export function getAllProjects(): Project[] {
@@ -332,7 +341,21 @@ export function getAllProjects(): Project[] {
 }
 
 export function getFeaturedProjects(): Project[] {
-  return projects.filter((project) => project.featured);
+  return projects
+    .filter((project) => project.featured)
+    .sort(
+      (a, b) =>
+        (a.featuredOrder ?? Number.MAX_SAFE_INTEGER) -
+        (b.featuredOrder ?? Number.MAX_SAFE_INTEGER)
+    );
+}
+
+export function getClientProjects(): Project[] {
+  return projects.filter((project) => project.isClientProject);
+}
+
+export function getPersonalProjects(): Project[] {
+  return projects.filter((project) => !project.isClientProject);
 }
 
 export function getProjectBySlug(slug: string): Project | undefined {

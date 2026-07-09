@@ -21,6 +21,7 @@ export const siteConfig: SiteConfig = {
     institution: "Faculty of Computer and Data Science",
     expectedGraduation: 2029,
   },
+  learningSince: 2022,
   englishLevel: "B2",
   resumeUrl: "/resume",
 };

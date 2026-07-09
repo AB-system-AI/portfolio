@@ -4,6 +4,7 @@ import {
   getAllProjectSlugs,
   getProjectBySlug,
 } from "@/lib/content/projects";
+import { enrichProject } from "@/lib/project-images.server";
 import { createPageMetadata } from "@/lib/metadata";
 import { ProjectDetail } from "@/components/projects/project-detail";
 
@@ -40,5 +41,5 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
     notFound();
   }
 
-  return <ProjectDetail project={project} />;
+  return <ProjectDetail project={enrichProject(project)} />;
 }

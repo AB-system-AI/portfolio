@@ -2,11 +2,12 @@
 
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { ArrowRight, Clock, Pin, Star } from "lucide-react";
+import { ArrowRight, Clock, Hammer, Pin, Star } from "lucide-react";
 import type { Project } from "@/lib/content/types";
 import {
   formatProjectCategory,
   getProjectReadingTime,
+  getProjectTimeline,
 } from "@/lib/content/project-utils";
 import { ScrollReveal } from "@/components/animations/scroll-reveal";
 import { PremiumCard } from "@/components/animations/premium-card";
@@ -26,6 +27,8 @@ interface ProjectCardProps {
 export function ProjectCard({ project, index, compact = false }: ProjectCardProps) {
   const prefersReducedMotion = useReducedMotion();
   const readingTime = getProjectReadingTime(project);
+  const timeline = getProjectTimeline(project);
+  const isBuilding = project.status === "in-development";
 
   return (
     <ScrollReveal delay={index * 0.08}>
@@ -52,6 +55,12 @@ export function ProjectCard({ project, index, compact = false }: ProjectCardProp
                   Featured
                 </Badge>
               )}
+              {isBuilding && (
+                <Badge className="rounded-full bg-background/80 text-[10px] backdrop-blur-sm">
+                  <Hammer className="mr-1 size-3" />
+                  Currently Building
+                </Badge>
+              )}
             </div>
           </div>
         </Link>
@@ -61,7 +70,9 @@ export function ProjectCard({ project, index, compact = false }: ProjectCardProp
             <Badge variant="secondary" className="rounded-full text-xs font-normal">
               {formatProjectCategory(project.category)}
             </Badge>
-            <span className="text-xs text-muted-foreground">{project.year}</span>
+            {timeline && (
+              <span className="text-xs text-muted-foreground">{timeline}</span>
+            )}
             <span className="inline-flex items-center gap-1 text-xs text-muted-foreground">
               <Clock className="size-3" />
               {readingTime} min
@@ -104,7 +115,10 @@ export function ProjectCard({ project, index, compact = false }: ProjectCardProp
 
           <div className="mt-6 flex flex-wrap items-center gap-3">
             <ProjectLinks project={project} />
-            <motion.div whileHover={prefersReducedMotion ? undefined : { x: 3 }} transition={springSoft}>
+            <motion.div
+              whileHover={prefersReducedMotion ? undefined : { x: 3 }}
+              transition={springSoft}
+            >
               <Link
                 href={`/projects/${project.slug}`}
                 className="inline-flex items-center gap-1 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"

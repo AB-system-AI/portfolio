@@ -2,11 +2,12 @@
 
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { ArrowLeft, ArrowRight, Clock, Star } from "lucide-react";
+import { ArrowLeft, ArrowRight, Clock, Hammer, Star } from "lucide-react";
 import { getFeaturedProjects } from "@/lib/content/projects";
 import {
   formatProjectCategory,
   getProjectReadingTime,
+  getProjectTimeline,
 } from "@/lib/content/project-utils";
 import { ProjectVisual } from "@/components/projects/project-visual";
 import { Badge } from "@/components/ui/badge";
@@ -45,7 +46,11 @@ export function FeaturedProjectsCarousel() {
         </ScrollReveal>
 
         <div className="-mx-4 flex gap-6 overflow-x-auto px-4 pb-4 snap-x snap-mandatory scrollbar-none sm:-mx-6 sm:px-6">
-          {projects.map((project, index) => (
+          {projects.map((project, index) => {
+            const timeline = getProjectTimeline(project);
+            const isBuilding = project.status === "in-development";
+
+            return (
             <ScrollReveal
               key={project.slug}
               delay={index * 0.08}
@@ -61,10 +66,21 @@ export function FeaturedProjectsCarousel() {
                       <Badge variant="secondary" className="rounded-full text-[10px]">
                         {formatProjectCategory(project.category)}
                       </Badge>
+                      {isBuilding && (
+                        <Badge variant="outline" className="rounded-full text-[10px]">
+                          <Hammer className="mr-1 size-3" />
+                          Currently Building
+                        </Badge>
+                      )}
                       <Badge variant="outline" className="rounded-full text-[10px]">
                         <Star className="mr-1 size-3" />
                         Featured
                       </Badge>
+                      {timeline && (
+                        <span className="text-[10px] text-muted-foreground">
+                          {timeline}
+                        </span>
+                      )}
                       <span className="inline-flex items-center gap-1 text-[10px] text-muted-foreground">
                         <Clock className="size-3" />
                         {getProjectReadingTime(project)} min read
@@ -88,7 +104,8 @@ export function FeaturedProjectsCarousel() {
                 </Link>
               </PremiumCard>
             </ScrollReveal>
-          ))}
+            );
+          })}
         </div>
 
         <div className="mt-4 flex justify-center gap-2 text-xs text-muted-foreground sm:hidden">

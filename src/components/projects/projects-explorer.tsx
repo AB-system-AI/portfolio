@@ -54,7 +54,12 @@ export function ProjectsExplorer({
           .toLowerCase()
           .includes(normalized);
 
-      return matchesCategory && matchesQuery;
+      const hideFromMainGrid =
+        !query &&
+        category === "all" &&
+        project.isClientProject;
+
+      return matchesCategory && matchesQuery && !hideFromMainGrid;
     });
 
     return sortProjects(items, sort);
@@ -63,7 +68,13 @@ export function ProjectsExplorer({
   const featured = getAllProjects().filter(
     (project) => project.featured && !project.pinned
   );
-  const pinned = getAllProjects().filter((project) => project.pinned);
+  const pinned = getAllProjects()
+    .filter((project) => project.pinned)
+    .sort(
+      (a, b) =>
+        (a.featuredOrder ?? Number.MAX_SAFE_INTEGER) -
+        (b.featuredOrder ?? Number.MAX_SAFE_INTEGER)
+    );
   const mainProjects =
     category === "all" && !query
       ? filtered.filter((project) => !project.pinned && !project.featured)

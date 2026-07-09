@@ -4,10 +4,10 @@ import {
   formatProjectCategory,
   getProjectCaseStudyContent,
   getProjectReadingTime,
+  getProjectTimeline,
   getRelatedProjects,
 } from "@/lib/content/project-utils";
 import { ProjectGallery } from "./project-gallery";
-import { ProjectVisual } from "./project-visual";
 import { ProjectLinks } from "./project-links";
 import { ProjectCaseStudyList } from "./project-case-study-list";
 import { ProjectTableOfContents } from "./project-table-of-contents";
@@ -15,7 +15,7 @@ import { RelatedProjects } from "./related-projects";
 import { Badge } from "@/components/ui/badge";
 import { ScrollReveal } from "@/components/animations/scroll-reveal";
 import { CTASection } from "@/components/sections/cta-section";
-import { Clock, Star } from "lucide-react";
+import { Clock, Hammer, Star } from "lucide-react";
 
 interface ProjectDetailProps {
   project: Project;
@@ -23,12 +23,11 @@ interface ProjectDetailProps {
 
 const TOC_ITEMS = [
   { id: "overview", label: "Overview" },
-  { id: "business-problem", label: "Business problem" },
+  { id: "problem", label: "Problem" },
   { id: "solution", label: "Solution" },
   { id: "architecture", label: "Architecture" },
+  { id: "technologies", label: "Technologies" },
   { id: "features", label: "Features" },
-  { id: "tech-stack", label: "Tech stack" },
-  { id: "development-process", label: "Development process" },
   { id: "challenges", label: "Challenges" },
   { id: "results", label: "Results" },
   { id: "gallery", label: "Gallery" },
@@ -60,6 +59,8 @@ export function ProjectDetail({ project }: ProjectDetailProps) {
   const caseStudy = getProjectCaseStudyContent(project);
   const related = getRelatedProjects(project);
   const readingTime = getProjectReadingTime(project);
+  const timeline = getProjectTimeline(project);
+  const isBuilding = project.status === "in-development";
 
   return (
     <>
@@ -71,11 +72,19 @@ export function ProjectDetail({ project }: ProjectDetailProps) {
               <Badge variant="secondary" className="rounded-full">
                 {formatProjectCategory(project.category)}
               </Badge>
-              <span className="text-sm text-muted-foreground">{project.year}</span>
+              {timeline && (
+                <span className="text-sm text-muted-foreground">{timeline}</span>
+              )}
               <span className="inline-flex items-center gap-1 text-sm text-muted-foreground">
                 <Clock className="size-3.5" />
                 {readingTime} min read
               </span>
+              {isBuilding && (
+                <Badge variant="outline" className="rounded-full">
+                  <Hammer className="mr-1 size-3" />
+                  Currently Building
+                </Badge>
+              )}
               {project.featured && (
                 <Badge variant="outline" className="rounded-full">
                   <Star className="mr-1 size-3" />
@@ -95,12 +104,8 @@ export function ProjectDetail({ project }: ProjectDetailProps) {
           </ScrollReveal>
 
           <ScrollReveal delay={0.1} className="mt-12">
-            <div id="gallery" className="scroll-mt-32 overflow-hidden rounded-2xl border border-border/50">
-              {project.images.length > 0 ? (
-                <ProjectGallery images={project.images} title={project.title} />
-              ) : (
-                <ProjectVisual project={project} priority parallax />
-              )}
+            <div id="gallery" className="scroll-mt-32 overflow-hidden rounded-2xl border border-border/50 p-4 sm:p-6">
+              <ProjectGallery project={project} />
             </div>
           </ScrollReveal>
         </div>
@@ -119,9 +124,9 @@ export function ProjectDetail({ project }: ProjectDetailProps) {
               </div>
             </CaseStudySection>
 
-            <CaseStudySection id="business-problem" title="Business problem">
+            <CaseStudySection id="problem" title="Problem">
               <p className="text-base leading-relaxed text-muted-foreground">
-                {caseStudy.businessProblem}
+                {caseStudy.problem}
               </p>
             </CaseStudySection>
 
@@ -139,7 +144,7 @@ export function ProjectDetail({ project }: ProjectDetailProps) {
               <ProjectCaseStudyList title="" items={project.features} />
             </CaseStudySection>
 
-            <CaseStudySection id="tech-stack" title="Tech stack">
+            <CaseStudySection id="technologies" title="Technologies">
               <div className="flex flex-wrap gap-2">
                 {project.technologies.map((tech) => (
                   <Badge
@@ -151,10 +156,6 @@ export function ProjectDetail({ project }: ProjectDetailProps) {
                   </Badge>
                 ))}
               </div>
-            </CaseStudySection>
-
-            <CaseStudySection id="development-process" title="Development process">
-              <ProjectCaseStudyList title="" items={caseStudy.developmentProcess} />
             </CaseStudySection>
 
             <CaseStudySection id="challenges" title="Challenges">

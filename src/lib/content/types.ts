@@ -15,6 +15,8 @@ export interface SiteConfig {
     institution: string;
     expectedGraduation: number;
   };
+  /** Year programming journey began — used for Years Learning counter */
+  learningSince: number;
   englishLevel: string;
   resumeUrl?: string;
 }
@@ -78,6 +80,15 @@ export type ProjectCategory =
   | "design"
   | "other";
 
+export type ProjectStatus = "completed" | "in-development";
+
+export type ProjectSegment =
+  | "personal"
+  | "client"
+  | "business-system"
+  | "commercial-website"
+  | "enterprise-platform";
+
 export interface ProjectImage {
   src: string;
   alt: string;
@@ -96,11 +107,18 @@ export interface Project {
   github?: string;
   liveDemo?: string;
   year: number;
+  endYear?: number;
+  timeline?: string;
+  status?: ProjectStatus;
+  segment?: ProjectSegment;
+  featuredOrder?: number;
+  isClientProject?: boolean;
   client?: string;
   challenges: string[];
   solutions: string[];
   results: string[];
   features: string[];
+  problem?: string;
   businessProblem?: string;
   architecture?: string;
   developmentProcess?: string[];

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { createPageMetadata } from "@/lib/metadata";
 import { ProjectsExplorer } from "@/components/projects/projects-explorer";
+import { ClientProjectsSection } from "@/components/sections/client-projects-section";
 import { CTASection } from "@/components/sections/cta-section";
 import { PageHero } from "@/components/layout/page-hero";
 
@@ -23,6 +24,7 @@ export default function ProjectsPage() {
           <ProjectsExplorer />
         </div>
       </section>
+      <ClientProjectsSection />
       <CTASection />
     </>
   );
