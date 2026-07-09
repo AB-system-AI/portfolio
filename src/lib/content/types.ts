@@ -101,6 +101,10 @@ export interface Project {
   solutions: string[];
   results: string[];
   features: string[];
+  businessProblem?: string;
+  architecture?: string;
+  developmentProcess?: string[];
+  pinned?: boolean;
   /** Fallback card styling when no cover image is provided */
   gradient?: string;
   accent?: string;

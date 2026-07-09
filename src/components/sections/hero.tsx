@@ -2,16 +2,21 @@
 
 import { motion } from "framer-motion";
 import { ArrowRight, Mail } from "lucide-react";
-import { siteConfig, stats } from "@/lib/data";
-import { LinkButton } from "@/components/ui/link-button";
+import { siteConfig } from "@/lib/data";
+import { getPortfolioStats } from "@/lib/content/project-utils";
+import { MagneticLinkButton } from "@/components/ui/magnetic-button";
 import { AnimatedBackground } from "@/components/animations/animated-background";
+import { TextReveal } from "@/components/animations/text-reveal";
+import { TypingText } from "@/components/animations/typing-text";
+import { StatsCounter } from "@/components/sections/stats-counter";
 import { useReducedMotion } from "@/hooks/use-reduced-motion";
+import { EASE_PREMIUM } from "@/lib/motion";
 
 const containerVariants = {
   hidden: { opacity: 0 },
   visible: {
     opacity: 1,
-    transition: { staggerChildren: 0.12, delayChildren: 0.3 },
+    transition: { staggerChildren: 0.12, delayChildren: 0.25 },
   },
 };
 
@@ -20,12 +25,13 @@ const itemVariants = {
   visible: {
     opacity: 1,
     y: 0,
-    transition: { duration: 0.7, ease: [0.21, 0.47, 0.32, 0.98] as const },
+    transition: { duration: 0.7, ease: EASE_PREMIUM },
   },
 };
 
 export function Hero() {
   const prefersReducedMotion = useReducedMotion();
+  const stats = getPortfolioStats();
 
   return (
     <section className="relative flex min-h-screen items-center overflow-hidden pt-24">
@@ -51,29 +57,31 @@ export function Hero() {
             variants={itemVariants}
             className="font-heading mt-8 text-balance text-4xl font-semibold leading-[1.05] tracking-tight text-foreground sm:text-5xl md:text-6xl lg:text-7xl"
           >
-            Building digital
+            <TextReveal text="Building digital" />
             <br />
-            <span className="text-muted-foreground">experiences</span>
+            <span className="text-muted-foreground">
+              <TextReveal text="experiences" delay={0.15} />
+            </span>
             <br />
-            that matter.
+            <TextReveal text="that matter." delay={0.3} />
           </motion.h1>
 
           <motion.p
             variants={itemVariants}
             className="mt-8 max-w-xl text-base leading-relaxed text-muted-foreground sm:text-lg md:text-xl"
           >
-            {siteConfig.tagline}
+            <TypingText text={siteConfig.tagline} speed={22} />
           </motion.p>
 
           <motion.div
             variants={itemVariants}
             className="mt-10 flex flex-wrap items-center gap-4"
           >
-            <LinkButton href="/projects" size="xl" className="rounded-full px-8">
+            <MagneticLinkButton href="/projects" size="xl" className="rounded-full px-8">
               View My Work
               <ArrowRight className="size-4" />
-            </LinkButton>
-            <LinkButton
+            </MagneticLinkButton>
+            <MagneticLinkButton
               href="/contact"
               variant="outline"
               size="xl"
@@ -81,26 +89,22 @@ export function Hero() {
             >
               <Mail className="size-4" />
               Get in Touch
-            </LinkButton>
+            </MagneticLinkButton>
           </motion.div>
 
-          {stats.length > 0 && (
           <motion.div
             variants={itemVariants}
             className="mt-16 grid grid-cols-2 gap-6 border-t border-border/50 pt-8 sm:mt-20 sm:grid-cols-4 sm:gap-8 sm:pt-10"
           >
-            {stats.map((stat) => (
-              <div key={stat.label}>
-                <p className="text-2xl font-semibold tracking-tight sm:text-3xl md:text-4xl">
-                  {stat.value}
-                </p>
-                <p className="mt-1 text-xs text-muted-foreground sm:text-sm">
-                  {stat.label}
-                </p>
-              </div>
+            {stats.map((stat, index) => (
+              <StatsCounter
+                key={stat.label}
+                value={stat.value}
+                label={stat.label}
+                delay={index * 0.08}
+              />
             ))}
           </motion.div>
-          )}
         </motion.div>
       </div>
 

@@ -2,11 +2,13 @@
 
 import { useState, type FormEvent } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Send, CheckCircle, Mail, MapPin, Phone } from "lucide-react";
+import { Send, CheckCircle, Mail, MapPin, Phone, Copy, Check } from "lucide-react";
 import { WhatsAppIcon } from "@/components/icons/brand-icons";
 import { siteConfig } from "@/lib/data";
 import { SectionHeader } from "@/components/animations/section-header";
 import { ScrollReveal } from "@/components/animations/scroll-reveal";
+import { PremiumCard } from "@/components/animations/premium-card";
+import { MagneticButton } from "@/components/ui/magnetic-button";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -14,6 +16,33 @@ import { Label } from "@/components/ui/label";
 
 interface ContactFormProps {
   showHeader?: boolean;
+}
+
+function CopyEmailButton() {
+  const [copied, setCopied] = useState(false);
+
+  const handleCopy = async () => {
+    try {
+      await navigator.clipboard.writeText(siteConfig.email);
+      setCopied(true);
+      window.setTimeout(() => setCopied(false), 2000);
+    } catch {
+      setCopied(false);
+    }
+  };
+
+  return (
+    <Button
+      type="button"
+      variant="outline"
+      size="sm"
+      onClick={handleCopy}
+      className="rounded-full"
+    >
+      {copied ? <Check className="size-3.5" /> : <Copy className="size-3.5" />}
+      {copied ? "Copied" : "Copy email"}
+    </Button>
+  );
 }
 
 export function ContactForm({ showHeader = true }: ContactFormProps) {
@@ -41,7 +70,7 @@ export function ContactForm({ showHeader = true }: ContactFormProps) {
 
         <div className="grid gap-12 lg:grid-cols-5">
           <ScrollReveal className="lg:col-span-2">
-            <div className="space-y-8">
+            <PremiumCard className="h-full p-6 sm:p-8">
               <div>
                 <h2 className="text-lg font-semibold">Get in touch</h2>
                 <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
@@ -49,52 +78,56 @@ export function ContactForm({ showHeader = true }: ContactFormProps) {
                 </p>
               </div>
 
-              <div className="space-y-4">
-                <a
-                  href={`mailto:${siteConfig.email}`}
-                  className="glass-card group flex items-center gap-4 rounded-xl p-4 transition-colors hover:border-border hover:bg-muted/50"
-                >
-                  <div className="flex size-10 items-center justify-center rounded-lg bg-muted">
-                    <Mail className="size-4" aria-hidden="true" />
+              <div className="mt-8 space-y-4">
+                <div className="rounded-xl border border-border/60 bg-muted/10 p-4">
+                  <a
+                    href={`mailto:${siteConfig.email}`}
+                    className="group flex items-center gap-4 transition-colors hover:text-foreground"
+                  >
+                    <div className="flex size-10 items-center justify-center rounded-lg bg-muted">
+                      <Mail className="size-4" aria-hidden="true" />
+                    </div>
+                    <div>
+                      <p className="text-xs text-muted-foreground">Email</p>
+                      <p className="text-sm font-medium group-hover:underline">
+                        {siteConfig.email}
+                      </p>
+                    </div>
+                  </a>
+                  <div className="mt-3">
+                    <CopyEmailButton />
                   </div>
-                  <div>
-                    <p className="text-xs text-muted-foreground">Email</p>
-                    <p className="text-sm font-medium group-hover:underline">
-                      {siteConfig.email}
-                    </p>
-                  </div>
-                </a>
+                </div>
+
                 <a
                   href={`tel:${siteConfig.phone.replace(/\s/g, "")}`}
-                  className="glass-card group flex items-center gap-4 rounded-xl p-4 transition-colors hover:border-border hover:bg-muted/50"
+                  className="flex items-center gap-4 rounded-xl border border-border/60 p-4 transition-colors hover:border-border hover:bg-muted/20"
                 >
                   <div className="flex size-10 items-center justify-center rounded-lg bg-muted">
                     <Phone className="size-4" aria-hidden="true" />
                   </div>
                   <div>
                     <p className="text-xs text-muted-foreground">Phone</p>
-                    <p className="text-sm font-medium group-hover:underline">
-                      {siteConfig.phone}
-                    </p>
+                    <p className="text-sm font-medium">{siteConfig.phone}</p>
                   </div>
                 </a>
+
                 <a
                   href={siteConfig.whatsapp}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="glass-card group flex items-center gap-4 rounded-xl p-4 transition-colors hover:border-border hover:bg-muted/50"
+                  className="flex items-center gap-4 rounded-xl border border-border/60 p-4 transition-colors hover:border-border hover:bg-muted/20"
                 >
                   <div className="flex size-10 items-center justify-center rounded-lg bg-muted">
                     <WhatsAppIcon className="size-4" />
                   </div>
                   <div>
                     <p className="text-xs text-muted-foreground">WhatsApp</p>
-                    <p className="text-sm font-medium group-hover:underline">
-                      Message on WhatsApp
-                    </p>
+                    <p className="text-sm font-medium">Message on WhatsApp</p>
                   </div>
                 </a>
-                <div className="glass-card flex items-center gap-4 rounded-xl p-4">
+
+                <div className="flex items-center gap-4 rounded-xl border border-border/60 p-4">
                   <div className="flex size-10 items-center justify-center rounded-lg bg-muted">
                     <MapPin className="size-4" aria-hidden="true" />
                   </div>
@@ -104,7 +137,7 @@ export function ContactForm({ showHeader = true }: ContactFormProps) {
                   </div>
                 </div>
               </div>
-            </div>
+            </PremiumCard>
           </ScrollReveal>
 
           <ScrollReveal className="lg:col-span-3" delay={0.15}>
@@ -116,19 +149,18 @@ export function ContactForm({ showHeader = true }: ContactFormProps) {
                   animate={{ opacity: 1, scale: 1 }}
                   role="status"
                   aria-live="polite"
-                  className="glass-card flex h-full min-h-[400px] flex-col items-center justify-center rounded-2xl p-8 text-center"
+                  className="premium-card flex h-full min-h-[400px] flex-col items-center justify-center rounded-2xl p-8 text-center"
                 >
                   <motion.div
-                    initial={{ scale: 0 }}
-                    animate={{ scale: 1 }}
-                    transition={{ type: "spring", delay: 0.2 }}
+                    initial={{ scale: 0, rotate: -20 }}
+                    animate={{ scale: 1, rotate: 0 }}
+                    transition={{ type: "spring", delay: 0.15 }}
                   >
                     <CheckCircle className="size-12 text-foreground" aria-hidden="true" />
                   </motion.div>
                   <h3 className="mt-4 text-xl font-semibold">Message sent!</h3>
                   <p className="mt-2 max-w-sm text-sm text-muted-foreground">
-                    Thank you for reaching out. I&apos;ll get back to you within
-                    24 hours.
+                    Thank you for reaching out. I&apos;ll get back to you within 24 hours.
                   </p>
                   <Button
                     variant="outline"
@@ -145,7 +177,7 @@ export function ContactForm({ showHeader = true }: ContactFormProps) {
                   animate={{ opacity: 1 }}
                   exit={{ opacity: 0 }}
                   onSubmit={handleSubmit}
-                  className="glass-card space-y-6 rounded-2xl p-8"
+                  className="premium-card space-y-6 rounded-2xl p-8"
                   noValidate
                 >
                   <div className="grid gap-6 sm:grid-cols-2">
@@ -195,7 +227,7 @@ export function ContactForm({ showHeader = true }: ContactFormProps) {
                       className="resize-none rounded-xl bg-background/50"
                     />
                   </div>
-                  <Button
+                  <MagneticButton
                     type="submit"
                     size="xl"
                     disabled={isSubmitting}
@@ -215,7 +247,7 @@ export function ContactForm({ showHeader = true }: ContactFormProps) {
                         Send Message
                       </>
                     )}
-                  </Button>
+                  </MagneticButton>
                 </motion.form>
               )}
             </AnimatePresence>

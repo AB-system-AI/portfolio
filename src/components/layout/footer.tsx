@@ -1,10 +1,15 @@
+"use client";
+
 import type { ComponentType } from "react";
 import Link from "next/link";
+import { motion } from "framer-motion";
 import { ArrowUpRight } from "lucide-react";
 import { GitHubIcon, LinkedInIcon, WhatsAppIcon } from "@/components/icons/brand-icons";
 import { navLinks, siteConfig, socialLinks } from "@/lib/data";
 import type { SocialPlatform } from "@/lib/content/types";
 import { Separator } from "@/components/ui/separator";
+import { AnimatedLink } from "@/components/ui/animated-link";
+import { springSoft } from "@/lib/motion";
 
 const socialIcons: Partial<
   Record<SocialPlatform, ComponentType<{ className?: string }>>
@@ -18,8 +23,9 @@ export function Footer() {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="border-t border-border/50 bg-muted/30">
-      <div className="mx-auto max-w-6xl px-4 py-16 sm:px-6">
+    <footer className="relative border-t border-border/50 bg-muted/30">
+      <div className="mesh-gradient pointer-events-none absolute inset-0 opacity-40" aria-hidden="true" />
+      <div className="relative mx-auto max-w-6xl px-4 py-16 sm:px-6">
         <div className="grid gap-12 md:grid-cols-3">
           <div>
             <Link href="/" className="text-lg font-semibold tracking-tight">
@@ -32,12 +38,14 @@ export function Footer() {
               {socialLinks.map((link) => {
                 const Icon = socialIcons[link.platform];
                 return (
-                  <a
+                  <motion.a
                     key={link.url}
                     href={link.url}
                     target="_blank"
                     rel="noopener noreferrer"
                     aria-label={`${link.label} profile (opens in new tab)`}
+                    whileHover={{ y: -2, scale: 1.05 }}
+                    transition={springSoft}
                     className="flex size-9 items-center justify-center rounded-full border border-border text-muted-foreground transition-colors hover:border-foreground hover:text-foreground"
                   >
                     {Icon ? (
@@ -45,7 +53,7 @@ export function Footer() {
                     ) : (
                       <span className="text-xs font-medium">{link.label.charAt(0)}</span>
                     )}
-                  </a>
+                  </motion.a>
                 );
               })}
             </div>
@@ -58,13 +66,13 @@ export function Footer() {
             <ul className="mt-4 space-y-3">
               {navLinks.map((link) => (
                 <li key={link.href}>
-                  <Link
+                  <AnimatedLink
                     href={link.href}
-                    className="group inline-flex items-center gap-1 text-sm text-muted-foreground transition-colors hover:text-foreground"
+                    className="group inline-flex items-center gap-1 text-sm text-muted-foreground"
                   >
                     {link.label}
                     <ArrowUpRight className="size-3 opacity-0 transition-opacity group-hover:opacity-100" />
-                  </Link>
+                  </AnimatedLink>
                 </li>
               ))}
             </ul>

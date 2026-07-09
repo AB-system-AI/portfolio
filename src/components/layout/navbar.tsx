@@ -8,8 +8,9 @@ import { Menu, X } from "lucide-react";
 import { navLinks, siteConfig } from "@/lib/data";
 import { ThemeToggle } from "./theme-toggle";
 import { Button } from "@/components/ui/button";
-import { LinkButton } from "@/components/ui/link-button";
+import { MagneticLinkButton } from "@/components/ui/magnetic-button";
 import { cn } from "@/lib/utils";
+import { springSoft } from "@/lib/motion";
 
 const menuId = "mobile-navigation-menu";
 
@@ -66,9 +67,16 @@ export function Navbar() {
 
   return (
     <header className="fixed top-0 right-0 left-0 z-50 px-4 pt-4 sm:px-6">
-      <nav
+      <motion.nav
+        animate={{
+          y: scrolled ? 0 : 0,
+          boxShadow: scrolled
+            ? "0 12px 40px -20px rgba(0,0,0,0.25)"
+            : "0 0 0 rgba(0,0,0,0)",
+        }}
+        transition={springSoft}
         className={cn(
-          "mx-auto flex max-w-6xl items-center justify-between rounded-2xl border px-4 py-3 transition-[background-color,border-color,box-shadow] duration-500 sm:px-6",
+          "mx-auto flex max-w-6xl items-center justify-between rounded-2xl border px-4 py-3 transition-[background-color,border-color] duration-500 sm:px-6",
           scrolled
             ? "glass shadow-lg shadow-black/5 dark:shadow-black/20"
             : "border-transparent bg-transparent"
@@ -79,9 +87,13 @@ export function Navbar() {
           href="/"
           className="group flex items-center gap-2 text-sm font-semibold tracking-tight"
         >
-          <span className="flex size-8 items-center justify-center rounded-lg bg-foreground text-background transition-transform group-hover:scale-105">
+          <motion.span
+            whileHover={{ scale: 1.05, rotate: 3 }}
+            transition={springSoft}
+            className="flex size-8 items-center justify-center rounded-lg bg-foreground text-background"
+          >
             {siteConfig.name.charAt(0)}
-          </span>
+          </motion.span>
           <span className="hidden sm:inline">{siteConfig.name.split(" ")[0]}</span>
         </Link>
 
@@ -106,6 +118,9 @@ export function Navbar() {
                     transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
                   />
                 )}
+                {!isActive && (
+                  <span className="absolute bottom-1 left-3 right-3 h-px origin-left scale-x-0 bg-foreground/40 transition-transform group-hover:scale-x-100" />
+                )}
               </Link>
             );
           })}
@@ -113,13 +128,13 @@ export function Navbar() {
 
         <div className="flex items-center gap-2">
           <ThemeToggle />
-          <LinkButton
+          <MagneticLinkButton
             href="/contact"
             size="sm"
             className="hidden rounded-full px-4 sm:inline-flex"
           >
             Let&apos;s Talk
-          </LinkButton>
+          </MagneticLinkButton>
           <Button
             ref={menuButtonRef}
             variant="ghost"
@@ -133,7 +148,7 @@ export function Navbar() {
             {isOpen ? <X className="size-5" /> : <Menu className="size-5" />}
           </Button>
         </div>
-      </nav>
+      </motion.nav>
 
       <AnimatePresence>
         {isOpen && (
@@ -175,9 +190,9 @@ export function Navbar() {
                   </motion.div>
                 );
               })}
-              <LinkButton href="/contact" className="mt-4 rounded-full" onClick={closeMenu}>
+              <MagneticLinkButton href="/contact" className="mt-4 rounded-full" onClick={closeMenu}>
                 Let&apos;s Talk
-              </LinkButton>
+              </MagneticLinkButton>
             </div>
           </motion.div>
         )}

@@ -1,11 +1,12 @@
 import { getAbout } from "@/lib/content/about";
 import { ArrowRight } from "lucide-react";
 import { Hero } from "@/components/sections/hero";
-import { ProjectsGrid } from "@/components/sections/projects-grid";
+import { FeaturedProjectsCarousel } from "@/components/sections/featured-projects-carousel";
 import { ServicesCards } from "@/components/sections/services-cards";
+import { ClientLogos } from "@/components/sections/client-logos";
 import { CTASection } from "@/components/sections/cta-section";
 import { ScrollReveal } from "@/components/animations/scroll-reveal";
-import { LinkButton } from "@/components/ui/link-button";
+import { MagneticLinkButton } from "@/components/ui/magnetic-button";
 
 export default function HomePage() {
   const about = getAbout();
@@ -13,7 +14,8 @@ export default function HomePage() {
   return (
     <>
       <Hero />
-      <ProjectsGrid showHeader={false} featuredOnly limit={4} />
+      <FeaturedProjectsCarousel />
+      <ClientLogos />
       <ServicesCards />
       <section className="py-24 sm:py-32">
         <div className="mx-auto max-w-6xl px-4 sm:px-6">
@@ -31,7 +33,7 @@ export default function HomePage() {
                 <p className="text-base leading-relaxed text-muted-foreground sm:text-lg">
                   {about.summary}
                 </p>
-                <LinkButton
+                <MagneticLinkButton
                   href="/about"
                   variant="outline"
                   size="sm"
@@ -39,7 +41,7 @@ export default function HomePage() {
                 >
                   Read more about me
                   <ArrowRight className="size-4" />
-                </LinkButton>
+                </MagneticLinkButton>
               </div>
             </div>
           </ScrollReveal>

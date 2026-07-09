@@ -4,6 +4,7 @@ import { getAbout } from "@/lib/content/about";
 import { siteConfig } from "@/lib/data";
 import { AboutContent } from "@/components/sections/about-content";
 import { AboutTimeline } from "@/components/sections/about-timeline";
+import { CertificatesPlaceholder } from "@/components/sections/certificates-placeholder";
 import { CTASection } from "@/components/sections/cta-section";
 import { PageHero } from "@/components/layout/page-hero";
 import { ScrollReveal } from "@/components/animations/scroll-reveal";
@@ -57,6 +58,7 @@ export default function AboutPage() {
       </PageHero>
       <AboutContent />
       <AboutTimeline />
+      <CertificatesPlaceholder />
       <CTASection />
     </>
   );

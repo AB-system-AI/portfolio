@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { createPageMetadata } from "@/lib/metadata";
-import { ProjectsGrid } from "@/components/sections/projects-grid";
+import { ProjectsExplorer } from "@/components/projects/projects-explorer";
 import { CTASection } from "@/components/sections/cta-section";
 import { PageHero } from "@/components/layout/page-hero";
 
@@ -18,7 +18,11 @@ export default function ProjectsPage() {
         title="Projects that define my craft"
         description="A selection of personal work and business system experience — built with modern technologies, clean architecture, and a focus on real operational value."
       />
-      <ProjectsGrid showHeader={false} />
+      <section className="pb-24 sm:pb-32">
+        <div className="mx-auto max-w-6xl px-4 sm:px-6">
+          <ProjectsExplorer />
+        </div>
+      </section>
       <CTASection />
     </>
   );

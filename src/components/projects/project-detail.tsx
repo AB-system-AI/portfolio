@@ -1,33 +1,86 @@
 import Link from "next/link";
 import type { Project } from "@/lib/content/types";
-import { formatProjectCategory } from "@/lib/content/project-utils";
+import {
+  formatProjectCategory,
+  getProjectCaseStudyContent,
+  getProjectReadingTime,
+  getRelatedProjects,
+} from "@/lib/content/project-utils";
 import { ProjectGallery } from "./project-gallery";
 import { ProjectVisual } from "./project-visual";
 import { ProjectLinks } from "./project-links";
 import { ProjectCaseStudyList } from "./project-case-study-list";
+import { ProjectTableOfContents } from "./project-table-of-contents";
+import { RelatedProjects } from "./related-projects";
 import { Badge } from "@/components/ui/badge";
 import { ScrollReveal } from "@/components/animations/scroll-reveal";
 import { CTASection } from "@/components/sections/cta-section";
+import { Clock, Star } from "lucide-react";
 
 interface ProjectDetailProps {
   project: Project;
 }
 
+const TOC_ITEMS = [
+  { id: "overview", label: "Overview" },
+  { id: "business-problem", label: "Business problem" },
+  { id: "solution", label: "Solution" },
+  { id: "architecture", label: "Architecture" },
+  { id: "features", label: "Features" },
+  { id: "tech-stack", label: "Tech stack" },
+  { id: "development-process", label: "Development process" },
+  { id: "challenges", label: "Challenges" },
+  { id: "results", label: "Results" },
+  { id: "gallery", label: "Gallery" },
+  { id: "links", label: "Links" },
+];
+
+function CaseStudySection({
+  id,
+  title,
+  children,
+}: {
+  id: string;
+  title: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <ScrollReveal>
+      <section id={id} className="scroll-mt-32">
+        <h2 className="font-heading text-2xl font-semibold tracking-tight sm:text-3xl">
+          {title}
+        </h2>
+        <div className="mt-5">{children}</div>
+      </section>
+    </ScrollReveal>
+  );
+}
+
 export function ProjectDetail({ project }: ProjectDetailProps) {
+  const caseStudy = getProjectCaseStudyContent(project);
+  const related = getRelatedProjects(project);
+  const readingTime = getProjectReadingTime(project);
+
   return (
     <>
-      <section className="pt-32 pb-16 sm:pt-40">
-        <div className="mx-auto max-w-6xl px-4 sm:px-6">
+      <section className="relative overflow-hidden pt-32 pb-16 sm:pt-40">
+        <div className="mesh-gradient pointer-events-none absolute inset-0 opacity-60" aria-hidden="true" />
+        <div className="relative mx-auto max-w-6xl px-4 sm:px-6">
           <ScrollReveal>
             <div className="flex flex-wrap items-center gap-3">
               <Badge variant="secondary" className="rounded-full">
                 {formatProjectCategory(project.category)}
               </Badge>
               <span className="text-sm text-muted-foreground">{project.year}</span>
-              {project.client && (
-                <span className="text-sm text-muted-foreground">
-                  · {project.client}
-                </span>
+              <span className="inline-flex items-center gap-1 text-sm text-muted-foreground">
+                <Clock className="size-3.5" />
+                {readingTime} min read
+              </span>
+              {project.featured && (
+                <Badge variant="outline" className="rounded-full">
+                  <Star className="mr-1 size-3" />
+                  Featured
+                </Badge>
               )}
             </div>
             <h1 className="font-heading mt-4 max-w-4xl text-balance text-4xl font-semibold tracking-tight sm:text-5xl md:text-6xl">
@@ -36,89 +89,93 @@ export function ProjectDetail({ project }: ProjectDetailProps) {
             <p className="mt-6 max-w-3xl text-lg leading-relaxed text-muted-foreground">
               {project.shortDescription}
             </p>
-            <ProjectLinks project={project} size="lg" className="mt-8" />
+            <div id="links" className="scroll-mt-32">
+              <ProjectLinks project={project} size="lg" className="mt-8" />
+            </div>
           </ScrollReveal>
 
           <ScrollReveal delay={0.1} className="mt-12">
-            {project.images.length > 0 ? (
-              <ProjectGallery images={project.images} title={project.title} />
-            ) : (
-              <div className="overflow-hidden rounded-2xl border border-border/50">
-                <ProjectVisual project={project} priority />
-              </div>
-            )}
+            <div id="gallery" className="scroll-mt-32 overflow-hidden rounded-2xl border border-border/50">
+              {project.images.length > 0 ? (
+                <ProjectGallery images={project.images} title={project.title} />
+              ) : (
+                <ProjectVisual project={project} priority parallax />
+              )}
+            </div>
           </ScrollReveal>
         </div>
       </section>
 
       <section className="pb-24 sm:pb-32">
-        <div className="mx-auto max-w-6xl px-4 sm:px-6">
-          <div className="grid gap-16 lg:grid-cols-3">
-            <ScrollReveal className="lg:col-span-2">
-              <div className="space-y-6">
-                <h2 className="font-heading text-2xl font-semibold tracking-tight">
-                  Overview
-                </h2>
-                <div className="space-y-4 text-base leading-relaxed text-muted-foreground">
-                  {project.fullDescription.split("\n\n").map((paragraph, index) => (
-                    <p key={index}>{paragraph}</p>
-                  ))}
-                </div>
+        <div className="mx-auto grid max-w-6xl gap-10 px-4 sm:px-6 xl:grid-cols-[220px_minmax(0,1fr)]">
+          <ProjectTableOfContents items={TOC_ITEMS} />
+
+          <div className="space-y-16">
+            <CaseStudySection id="overview" title="Overview">
+              <div className="space-y-4 text-base leading-relaxed text-muted-foreground">
+                {project.fullDescription.split("\n\n").map((paragraph, index) => (
+                  <p key={index}>{paragraph}</p>
+                ))}
               </div>
-            </ScrollReveal>
+            </CaseStudySection>
 
-            <ScrollReveal delay={0.1}>
-              <aside className="glass-card rounded-2xl p-6">
-                <h2 className="text-sm font-semibold uppercase tracking-wider">
-                  Technologies
-                </h2>
-                <div className="mt-4 flex flex-wrap gap-2">
-                  {project.technologies.map((tech) => (
-                    <Badge
-                      key={tech}
-                      variant="secondary"
-                      className="rounded-full text-xs font-normal"
-                    >
-                      {tech}
-                    </Badge>
-                  ))}
-                </div>
-                <div className="mt-8">
-                  <ProjectLinks project={project} />
-                </div>
-              </aside>
-            </ScrollReveal>
-          </div>
+            <CaseStudySection id="business-problem" title="Business problem">
+              <p className="text-base leading-relaxed text-muted-foreground">
+                {caseStudy.businessProblem}
+              </p>
+            </CaseStudySection>
 
-          <div className="mt-16 grid gap-12 md:grid-cols-2">
+            <CaseStudySection id="solution" title="Solution">
+              <ProjectCaseStudyList title="" items={project.solutions} />
+            </CaseStudySection>
+
+            <CaseStudySection id="architecture" title="Architecture">
+              <p className="text-base leading-relaxed text-muted-foreground">
+                {caseStudy.architecture}
+              </p>
+            </CaseStudySection>
+
+            <CaseStudySection id="features" title="Features">
+              <ProjectCaseStudyList title="" items={project.features} />
+            </CaseStudySection>
+
+            <CaseStudySection id="tech-stack" title="Tech stack">
+              <div className="flex flex-wrap gap-2">
+                {project.technologies.map((tech) => (
+                  <Badge
+                    key={tech}
+                    variant="secondary"
+                    className="rounded-full text-xs font-normal"
+                  >
+                    {tech}
+                  </Badge>
+                ))}
+              </div>
+            </CaseStudySection>
+
+            <CaseStudySection id="development-process" title="Development process">
+              <ProjectCaseStudyList title="" items={caseStudy.developmentProcess} />
+            </CaseStudySection>
+
+            <CaseStudySection id="challenges" title="Challenges">
+              <ProjectCaseStudyList title="" items={project.challenges} />
+            </CaseStudySection>
+
+            <CaseStudySection id="results" title="Results">
+              <ProjectCaseStudyList title="" items={project.results} />
+            </CaseStudySection>
+
+            <RelatedProjects projects={related} />
+
             <ScrollReveal>
-              <ProjectCaseStudyList title="Key features" items={project.features} />
-            </ScrollReveal>
-            <ScrollReveal delay={0.05}>
-              <ProjectCaseStudyList title="Challenges" items={project.challenges} />
-            </ScrollReveal>
-          </div>
-
-          <div className="mt-12 grid gap-12 md:grid-cols-2">
-            <ScrollReveal>
-              <ProjectCaseStudyList title="Solution" items={project.solutions} />
-            </ScrollReveal>
-            <ScrollReveal delay={0.05}>
-              <ProjectCaseStudyList
-                title="Business impact"
-                items={project.results}
-              />
+              <Link
+                href="/projects"
+                className="text-sm font-medium text-muted-foreground underline-offset-4 transition-colors hover:text-foreground hover:underline"
+              >
+                ← Back to all projects
+              </Link>
             </ScrollReveal>
           </div>
-
-          <ScrollReveal className="mt-16">
-            <Link
-              href="/projects"
-              className="text-sm font-medium text-muted-foreground underline-offset-4 transition-colors hover:text-foreground hover:underline"
-            >
-              ← Back to all projects
-            </Link>
-          </ScrollReveal>
         </div>
       </section>
 

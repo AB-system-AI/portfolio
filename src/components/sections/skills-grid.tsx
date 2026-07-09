@@ -1,10 +1,13 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import { getAllSkills } from "@/lib/content/skills";
 import { SectionHeader } from "@/components/animations/section-header";
 import { ScrollReveal } from "@/components/animations/scroll-reveal";
+import { PremiumCard } from "@/components/animations/premium-card";
 import { useReducedMotion } from "@/hooks/use-reduced-motion";
+import { cn } from "@/lib/utils";
 
 function SkillBar({
   name,
@@ -57,8 +60,9 @@ interface SkillsGridProps {
 }
 
 export function SkillsGrid({ showHeader = true }: SkillsGridProps) {
-  const prefersReducedMotion = useReducedMotion();
   const skills = getAllSkills();
+  const [activeCategory, setActiveCategory] = useState(0);
+  const activeGroup = skills[activeCategory];
 
   return (
     <section className="py-24 sm:py-32">
@@ -78,31 +82,88 @@ export function SkillsGrid({ showHeader = true }: SkillsGridProps) {
             </p>
           </div>
         ) : (
-          <div className="grid gap-8 sm:grid-cols-2">
-            {skills.map((group, groupIndex) => (
-            <ScrollReveal key={group.category} delay={groupIndex * 0.1}>
-              <motion.div
-                className="glass-card h-full rounded-2xl p-8 transition-[border-color,box-shadow] duration-500 hover:border-border"
-                whileHover={prefersReducedMotion ? undefined : { y: -4 }}
-                transition={{ type: "spring", stiffness: 300, damping: 20 }}
-              >
-                <h3 className="mb-6 text-sm font-semibold uppercase tracking-wider">
-                  {group.category}
-                </h3>
-                <div className="space-y-5">
-                  {group.items.map((skill, skillIndex) => (
-                    <SkillBar
-                      key={skill.name}
-                      name={skill.name}
-                      level={skill.level}
-                      delay={groupIndex * 0.1 + skillIndex * 0.05}
-                    />
-                  ))}
-                </div>
-              </motion.div>
+          <>
+            <ScrollReveal>
+              <div className="mb-8 flex flex-wrap gap-2">
+                {skills.map((group, index) => (
+                  <button
+                    key={group.category}
+                    type="button"
+                    onClick={() => setActiveCategory(index)}
+                    className={cn(
+                      "rounded-full border px-4 py-2 text-xs font-medium transition-colors",
+                      activeCategory === index
+                        ? "border-foreground bg-foreground text-background"
+                        : "border-border bg-background/50 text-muted-foreground hover:text-foreground"
+                    )}
+                  >
+                    {group.category}
+                  </button>
+                ))}
+              </div>
             </ScrollReveal>
-            ))}
-          </div>
+
+            <AnimatePresence mode="wait">
+              {activeGroup && (
+                <motion.div
+                  key={activeGroup.category}
+                  initial={{ opacity: 0, y: 12 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -12 }}
+                  transition={{ duration: 0.25 }}
+                >
+                  <PremiumCard className="p-8">
+                    <div className="mb-6 flex flex-wrap items-center justify-between gap-4">
+                      <h3 className="text-sm font-semibold uppercase tracking-wider">
+                        {activeGroup.category}
+                      </h3>
+                      <div className="flex flex-wrap gap-2">
+                        {activeGroup.items.slice(0, 6).map((skill) => (
+                          <span
+                            key={skill.name}
+                            className="rounded-full border border-border/70 bg-muted/30 px-3 py-1 text-[10px] text-muted-foreground"
+                          >
+                            {skill.name}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                    <div className="grid gap-5 sm:grid-cols-2">
+                      {activeGroup.items.map((skill, skillIndex) => (
+                        <SkillBar
+                          key={skill.name}
+                          name={skill.name}
+                          level={skill.level}
+                          delay={skillIndex * 0.05}
+                        />
+                      ))}
+                    </div>
+                  </PremiumCard>
+                </motion.div>
+              )}
+            </AnimatePresence>
+
+            <div className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+              {skills.map((group, groupIndex) => (
+                <ScrollReveal key={group.category} delay={groupIndex * 0.06}>
+                  <PremiumCard
+                    className={cn(
+                      "cursor-pointer p-6 transition-colors",
+                      activeCategory === groupIndex && "border-foreground/30"
+                    )}
+                    onClick={() => setActiveCategory(groupIndex)}
+                  >
+                    <h3 className="text-sm font-semibold uppercase tracking-wider">
+                      {group.category}
+                    </h3>
+                    <p className="mt-2 text-xs text-muted-foreground">
+                      {group.items.length} skills
+                    </p>
+                  </PremiumCard>
+                </ScrollReveal>
+              ))}
+            </div>
+          </>
         )}
       </div>
     </section>

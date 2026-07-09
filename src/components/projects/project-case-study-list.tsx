@@ -8,10 +8,12 @@ export function ProjectCaseStudyList({ title, items }: ProjectCaseStudyListProps
 
   return (
     <section>
-      <h2 className="font-heading text-xl font-semibold tracking-tight sm:text-2xl">
-        {title}
-      </h2>
-      <ul className="mt-4 space-y-3">
+      {title ? (
+        <h2 className="font-heading text-xl font-semibold tracking-tight sm:text-2xl">
+          {title}
+        </h2>
+      ) : null}
+      <ul className={title ? "mt-4 space-y-3" : "space-y-3"}>
         {items.map((item, index) => (
           <li
             key={`${title}-${index}`}

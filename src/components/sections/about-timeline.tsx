@@ -58,7 +58,7 @@ function ExperienceCard({
   align?: "left" | "right";
 }) {
   return (
-    <div className="glass-card ml-8 rounded-2xl p-6 text-left transition-[border-color] duration-500 hover:border-border sm:ml-0">
+                    <div className="glass-card ml-8 rounded-2xl p-6 text-left transition-[border-color,box-shadow] duration-500 hover:border-border hover:shadow-xl hover:shadow-black/5 sm:ml-0 dark:hover:shadow-black/20">
       <div
         className={`flex flex-wrap items-center gap-2 ${
           align === "right" ? "sm:justify-end" : ""

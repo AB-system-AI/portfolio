@@ -4,6 +4,7 @@ import { ThemeProvider } from "@/components/providers/theme-provider";
 import { Navbar } from "@/components/layout/navbar";
 import { Footer } from "@/components/layout/footer";
 import { LoadingScreen } from "@/components/layout/loading-screen";
+import { ScrollProgress } from "@/components/layout/scroll-progress";
 import { SkipLink } from "@/components/layout/skip-link";
 import { JsonLd } from "@/components/seo/json-ld";
 import { baseMetadata } from "@/lib/metadata";
@@ -48,6 +49,7 @@ export default function RootLayout({
         <JsonLd />
         <ThemeProvider>
           <SkipLink />
+          <ScrollProgress />
           <LoadingScreen />
           <Navbar />
           <main id="main-content" tabIndex={-1}>
