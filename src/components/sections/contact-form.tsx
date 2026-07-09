@@ -11,7 +11,11 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 
-export function ContactForm() {
+interface ContactFormProps {
+  showHeader?: boolean;
+}
+
+export function ContactForm({ showHeader = true }: ContactFormProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
 
@@ -26,17 +30,19 @@ export function ContactForm() {
   return (
     <section className="py-24 sm:py-32">
       <div className="mx-auto max-w-6xl px-4 sm:px-6">
-        <SectionHeader
-          label="Contact"
-          title="Let's work together"
-          description="Have a project in mind or just want to say hello? I'd love to hear from you."
-        />
+        {showHeader && (
+          <SectionHeader
+            label="Contact"
+            title="Let's work together"
+            description="Have a project in mind or just want to say hello? I'd love to hear from you."
+          />
+        )}
 
         <div className="grid gap-12 lg:grid-cols-5">
           <ScrollReveal className="lg:col-span-2">
             <div className="space-y-8">
               <div>
-                <h3 className="text-lg font-semibold">Get in touch</h3>
+                <h2 className="text-lg font-semibold">Get in touch</h2>
                 <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
                   I&apos;m currently available for freelance projects and
                   full-time opportunities. Let&apos;s create something
@@ -47,10 +53,10 @@ export function ContactForm() {
               <div className="space-y-4">
                 <a
                   href={`mailto:${siteConfig.email}`}
-                  className="group flex items-center gap-4 rounded-xl border border-border/50 p-4 transition-colors hover:border-border hover:bg-muted/50"
+                  className="glass-card group flex items-center gap-4 rounded-xl p-4 transition-colors hover:border-border hover:bg-muted/50"
                 >
                   <div className="flex size-10 items-center justify-center rounded-lg bg-muted">
-                    <Mail className="size-4" />
+                    <Mail className="size-4" aria-hidden="true" />
                   </div>
                   <div>
                     <p className="text-xs text-muted-foreground">Email</p>
@@ -59,9 +65,9 @@ export function ContactForm() {
                     </p>
                   </div>
                 </a>
-                <div className="flex items-center gap-4 rounded-xl border border-border/50 p-4">
+                <div className="glass-card flex items-center gap-4 rounded-xl p-4">
                   <div className="flex size-10 items-center justify-center rounded-lg bg-muted">
-                    <MapPin className="size-4" />
+                    <MapPin className="size-4" aria-hidden="true" />
                   </div>
                   <div>
                     <p className="text-xs text-muted-foreground">Location</p>
@@ -79,14 +85,16 @@ export function ContactForm() {
                   key="success"
                   initial={{ opacity: 0, scale: 0.95 }}
                   animate={{ opacity: 1, scale: 1 }}
-                  className="flex h-full min-h-[400px] flex-col items-center justify-center rounded-2xl border border-border/50 bg-card/30 p-8 text-center backdrop-blur-sm"
+                  role="status"
+                  aria-live="polite"
+                  className="glass-card flex h-full min-h-[400px] flex-col items-center justify-center rounded-2xl p-8 text-center"
                 >
                   <motion.div
                     initial={{ scale: 0 }}
                     animate={{ scale: 1 }}
                     transition={{ type: "spring", delay: 0.2 }}
                   >
-                    <CheckCircle className="size-12 text-emerald-500" />
+                    <CheckCircle className="size-12 text-foreground" aria-hidden="true" />
                   </motion.div>
                   <h3 className="mt-4 text-xl font-semibold">Message sent!</h3>
                   <p className="mt-2 max-w-sm text-sm text-muted-foreground">
@@ -108,7 +116,8 @@ export function ContactForm() {
                   animate={{ opacity: 1 }}
                   exit={{ opacity: 0 }}
                   onSubmit={handleSubmit}
-                  className="space-y-6 rounded-2xl border border-border/50 bg-card/30 p-8 backdrop-blur-sm"
+                  className="glass-card space-y-6 rounded-2xl p-8"
+                  noValidate
                 >
                   <div className="grid gap-6 sm:grid-cols-2">
                     <div className="space-y-2">
@@ -116,6 +125,7 @@ export function ContactForm() {
                       <Input
                         id="name"
                         name="name"
+                        autoComplete="name"
                         placeholder="John Doe"
                         required
                         className="h-11 rounded-xl bg-background/50"
@@ -127,6 +137,7 @@ export function ContactForm() {
                         id="email"
                         name="email"
                         type="email"
+                        autoComplete="email"
                         placeholder="john@example.com"
                         required
                         className="h-11 rounded-xl bg-background/50"
@@ -138,6 +149,7 @@ export function ContactForm() {
                     <Input
                       id="subject"
                       name="subject"
+                      autoComplete="off"
                       placeholder="Project inquiry"
                       required
                       className="h-11 rounded-xl bg-background/50"
@@ -156,9 +168,10 @@ export function ContactForm() {
                   </div>
                   <Button
                     type="submit"
-                    size="lg"
+                    size="xl"
                     disabled={isSubmitting}
-                    className="h-12 w-full rounded-full sm:w-auto sm:px-8"
+                    aria-busy={isSubmitting}
+                    className="w-full rounded-full sm:w-auto"
                   >
                     {isSubmitting ? (
                       <motion.span

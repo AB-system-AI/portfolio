@@ -1,36 +1,48 @@
 "use client";
 
 import { motion } from "framer-motion";
+import { useReducedMotion } from "@/hooks/use-reduced-motion";
 
 export function AnimatedBackground() {
+  const prefersReducedMotion = useReducedMotion();
+
   return (
     <div className="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden="true">
-      <motion.div
-        className="absolute -left-1/4 top-0 h-[600px] w-[600px] rounded-full bg-foreground/[0.03] blur-3xl dark:bg-foreground/[0.05]"
-        animate={{
-          x: [0, 100, 0],
-          y: [0, 50, 0],
-          scale: [1, 1.1, 1],
-        }}
-        transition={{
-          duration: 20,
-          repeat: Infinity,
-          ease: "easeInOut",
-        }}
-      />
-      <motion.div
-        className="absolute -right-1/4 bottom-0 h-[500px] w-[500px] rounded-full bg-foreground/[0.02] blur-3xl dark:bg-foreground/[0.04]"
-        animate={{
-          x: [0, -80, 0],
-          y: [0, -60, 0],
-          scale: [1, 1.15, 1],
-        }}
-        transition={{
-          duration: 25,
-          repeat: Infinity,
-          ease: "easeInOut",
-        }}
-      />
+      {prefersReducedMotion ? (
+        <>
+          <div className="absolute -left-1/4 top-0 h-[400px] w-[400px] rounded-full bg-foreground/[0.03] blur-2xl md:h-[600px] md:w-[600px] md:blur-3xl dark:bg-foreground/[0.05]" />
+          <div className="absolute -right-1/4 bottom-0 h-[350px] w-[350px] rounded-full bg-foreground/[0.02] blur-2xl md:h-[500px] md:w-[500px] md:blur-3xl dark:bg-foreground/[0.04]" />
+        </>
+      ) : (
+        <>
+          <motion.div
+            className="absolute -left-1/4 top-0 h-[400px] w-[400px] rounded-full bg-foreground/[0.03] blur-2xl md:h-[600px] md:w-[600px] md:blur-3xl dark:bg-foreground/[0.05]"
+            animate={{
+              x: [0, 60, 0],
+              y: [0, 30, 0],
+              scale: [1, 1.05, 1],
+            }}
+            transition={{
+              duration: 20,
+              repeat: Infinity,
+              ease: "easeInOut",
+            }}
+          />
+          <motion.div
+            className="absolute -right-1/4 bottom-0 h-[350px] w-[350px] rounded-full bg-foreground/[0.02] blur-2xl md:h-[500px] md:w-[500px] md:blur-3xl dark:bg-foreground/[0.04]"
+            animate={{
+              x: [0, -50, 0],
+              y: [0, -40, 0],
+              scale: [1, 1.08, 1],
+            }}
+            transition={{
+              duration: 25,
+              repeat: Infinity,
+              ease: "easeInOut",
+            }}
+          />
+        </>
+      )}
       <div className="absolute inset-0 bg-[linear-gradient(to_bottom,transparent_0%,var(--background)_100%)]" />
       <div
         className="absolute inset-0 opacity-[0.015] dark:opacity-[0.03]"

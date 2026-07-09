@@ -1,10 +1,9 @@
 import type { Metadata } from "next";
 import { siteConfig } from "./data";
-
-const baseUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://abdelrahman.dev";
+import { siteUrl } from "./site-url";
 
 export const baseMetadata: Metadata = {
-  metadataBase: new URL(baseUrl),
+  metadataBase: new URL(siteUrl),
   title: {
     default: `${siteConfig.name} — ${siteConfig.title}`,
     template: `%s | ${siteConfig.name}`,
@@ -19,12 +18,15 @@ export const baseMetadata: Metadata = {
     "Software Engineer",
     siteConfig.name,
   ],
-  authors: [{ name: siteConfig.name }],
+  authors: [{ name: siteConfig.name, url: siteUrl }],
   creator: siteConfig.name,
+  alternates: {
+    canonical: siteUrl,
+  },
   openGraph: {
     type: "website",
     locale: "en_US",
-    url: baseUrl,
+    url: siteUrl,
     siteName: siteConfig.name,
     title: `${siteConfig.name} — ${siteConfig.title}`,
     description: siteConfig.tagline,
@@ -33,7 +35,7 @@ export const baseMetadata: Metadata = {
     card: "summary_large_image",
     title: `${siteConfig.name} — ${siteConfig.title}`,
     description: siteConfig.tagline,
-    creator: "@abdelrahman",
+    creator: siteConfig.twitterHandle,
   },
   robots: {
     index: true,
@@ -46,18 +48,29 @@ export const baseMetadata: Metadata = {
       "max-snippet": -1,
     },
   },
+  icons: {
+    icon: "/icon",
+    apple: "/apple-icon",
+  },
 };
 
 export function createPageMetadata(
   title: string,
-  description: string
+  description: string,
+  path: string
 ): Metadata {
+  const url = `${siteUrl}${path}`;
+
   return {
     title,
     description,
+    alternates: {
+      canonical: url,
+    },
     openGraph: {
       title: `${title} | ${siteConfig.name}`,
       description,
+      url,
     },
     twitter: {
       title: `${title} | ${siteConfig.name}`,

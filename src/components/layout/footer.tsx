@@ -1,8 +1,18 @@
+import type { ComponentType } from "react";
 import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
 import { GitHubIcon, LinkedInIcon, XIcon } from "@/components/icons/brand-icons";
-import { navLinks, siteConfig } from "@/lib/data";
+import { navLinks, siteConfig, socialLinks } from "@/lib/data";
+import type { SocialPlatform } from "@/lib/content/types";
 import { Separator } from "@/components/ui/separator";
+
+const socialIcons: Partial<
+  Record<SocialPlatform, ComponentType<{ className?: string }>>
+> = {
+  github: GitHubIcon,
+  linkedin: LinkedInIcon,
+  twitter: XIcon,
+};
 
 export function Footer() {
   const currentYear = new Date().getFullYear();
@@ -19,33 +29,25 @@ export function Footer() {
               {siteConfig.tagline}
             </p>
             <div className="mt-6 flex gap-3">
-              <a
-                href={siteConfig.github}
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="GitHub profile"
-                className="flex size-9 items-center justify-center rounded-full border border-border text-muted-foreground transition-colors hover:border-foreground hover:text-foreground"
-              >
-                <GitHubIcon className="size-4" />
-              </a>
-              <a
-                href={siteConfig.linkedin}
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="LinkedIn profile"
-                className="flex size-9 items-center justify-center rounded-full border border-border text-muted-foreground transition-colors hover:border-foreground hover:text-foreground"
-              >
-                <LinkedInIcon className="size-4" />
-              </a>
-              <a
-                href={siteConfig.twitter}
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="Twitter profile"
-                className="flex size-9 items-center justify-center rounded-full border border-border text-muted-foreground transition-colors hover:border-foreground hover:text-foreground"
-              >
-                <XIcon className="size-4" />
-              </a>
+              {socialLinks.map((link) => {
+                const Icon = socialIcons[link.platform];
+                return (
+                  <a
+                    key={link.url}
+                    href={link.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label={`${link.label} profile (opens in new tab)`}
+                    className="flex size-9 items-center justify-center rounded-full border border-border text-muted-foreground transition-colors hover:border-foreground hover:text-foreground"
+                  >
+                    {Icon ? (
+                      <Icon className="size-4" />
+                    ) : (
+                      <span className="text-xs font-medium">{link.label.charAt(0)}</span>
+                    )}
+                  </a>
+                );
+              })}
             </div>
           </div>
 

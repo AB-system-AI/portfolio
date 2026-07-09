@@ -1,9 +1,11 @@
-import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import type { Metadata, Viewport } from "next";
+import { Inter, Instrument_Serif } from "next/font/google";
 import { ThemeProvider } from "@/components/providers/theme-provider";
 import { Navbar } from "@/components/layout/navbar";
 import { Footer } from "@/components/layout/footer";
 import { LoadingScreen } from "@/components/layout/loading-screen";
+import { SkipLink } from "@/components/layout/skip-link";
+import { JsonLd } from "@/components/seo/json-ld";
 import { baseMetadata } from "@/lib/metadata";
 import "./globals.css";
 
@@ -13,7 +15,23 @@ const inter = Inter({
   display: "swap",
 });
 
+const instrumentSerif = Instrument_Serif({
+  subsets: ["latin"],
+  weight: "400",
+  variable: "--font-serif",
+  display: "swap",
+});
+
 export const metadata: Metadata = baseMetadata;
+
+export const viewport: Viewport = {
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#ffffff" },
+    { media: "(prefers-color-scheme: dark)", color: "#0a0a0a" },
+  ],
+  width: "device-width",
+  initialScale: 1,
+};
 
 export default function RootLayout({
   children,
@@ -21,12 +39,20 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning className={inter.variable}>
+    <html
+      lang="en"
+      suppressHydrationWarning
+      className={`${inter.variable} ${instrumentSerif.variable}`}
+    >
       <body className="min-h-screen bg-background font-sans text-foreground antialiased">
+        <JsonLd />
         <ThemeProvider>
+          <SkipLink />
           <LoadingScreen />
           <Navbar />
-          <main>{children}</main>
+          <main id="main-content" tabIndex={-1}>
+            {children}
+          </main>
           <Footer />
         </ThemeProvider>
       </body>

@@ -1,13 +1,22 @@
 import type { MetadataRoute } from "next";
 import { navLinks } from "@/lib/data";
-
-const baseUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://abdelrahman.dev";
+import { getAllProjectSlugs } from "@/lib/content/projects";
+import { siteBuildDate, siteUrl } from "@/lib/site-url";
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  return navLinks.map((link) => ({
-    url: `${baseUrl}${link.href === "/" ? "" : link.href}`,
-    lastModified: new Date(),
-    changeFrequency: link.href === "/" ? "weekly" : "monthly",
+  const pages = navLinks.map((link) => ({
+    url: `${siteUrl}${link.href === "/" ? "" : link.href}`,
+    lastModified: siteBuildDate,
+    changeFrequency: link.href === "/" ? ("weekly" as const) : ("monthly" as const),
     priority: link.href === "/" ? 1 : 0.8,
   }));
+
+  const projectPages = getAllProjectSlugs().map((slug) => ({
+    url: `${siteUrl}/projects/${slug}`,
+    lastModified: siteBuildDate,
+    changeFrequency: "monthly" as const,
+    priority: 0.7,
+  }));
+
+  return [...pages, ...projectPages];
 }
