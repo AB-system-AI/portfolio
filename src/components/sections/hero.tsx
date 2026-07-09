@@ -62,7 +62,7 @@ export function Hero() {
             variants={itemVariants}
             className="mt-8 max-w-xl text-base leading-relaxed text-muted-foreground sm:text-lg md:text-xl"
           >
-            I&apos;m {siteConfig.name} — {siteConfig.tagline}
+            {siteConfig.tagline}
           </motion.p>
 
           <motion.div

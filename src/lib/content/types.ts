@@ -137,17 +137,21 @@ export interface SkillGroup {
 
 export type ServiceIcon =
   | "Code2"
-  | "Smartphone"
-  | "Palette"
-  | "Cloud"
-  | "Bot"
-  | "Shield";
+  | "Globe"
+  | "Layers"
+  | "ShoppingCart"
+  | "GraduationCap"
+  | "LayoutDashboard"
+  | "Server";
 
 export interface Service {
   icon: ServiceIcon;
   title: string;
   description: string;
+  businessValue: string;
   features: string[];
+  technologies: string[];
+  cta: string;
 }
 
 // ---------------------------------------------------------------------------

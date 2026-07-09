@@ -10,7 +10,7 @@ export const siteConfig: SiteConfig = {
   name: "Abdelrahman Mohamed",
   title: "Full-Stack Web Developer | Business Systems Developer",
   tagline:
-    "Building scalable web applications, business systems, and modern software solutions.",
+    "I build modern web applications and business systems that help companies work more efficiently.",
   email: "bodammohamed204@gmail.com",
   phone: "+20 1284525538",
   whatsapp:
