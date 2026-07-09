@@ -5,10 +5,10 @@ import { siteBuildDate, siteUrl } from "@/lib/site-url";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const pages = navLinks.map((link) => ({
-    url: `${siteUrl}${link.href === "/" ? "" : link.href}`,
-    lastModified: siteBuildDate,
-    changeFrequency: link.href === "/" ? ("weekly" as const) : ("monthly" as const),
-    priority: link.href === "/" ? 1 : 0.8,
+      url: `${siteUrl}${link.href === "/" ? "" : link.href}`,
+      lastModified: siteBuildDate,
+      changeFrequency: link.href === "/" ? ("weekly" as const) : ("monthly" as const),
+      priority: link.href === "/" ? 1 : 0.8,
   }));
 
   const projectPages = getAllProjectSlugs().map((slug) => ({

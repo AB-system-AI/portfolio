@@ -32,3 +32,14 @@ export {
 export { certificates, getAllCertificates } from "./certificates";
 
 export { about, getAbout } from "./about";
+
+export {
+  getResumeContact,
+  getResumeEducation,
+  getResumeExperience,
+  getResumeFeaturedProjects,
+  getResumeLanguages,
+  getResumeSkills,
+  resumeAvailability,
+  resumeSummary,
+} from "./resume";

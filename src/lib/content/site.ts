@@ -22,6 +22,7 @@ export const siteConfig: SiteConfig = {
     expectedGraduation: 2029,
   },
   englishLevel: "B2",
+  resumeUrl: "/resume",
 };
 
 export const socialLinks: SocialLink[] = [
@@ -48,6 +49,7 @@ export const navLinks: NavLink[] = [
   { href: "/projects", label: "Projects" },
   { href: "/services", label: "Services" },
   { href: "/skills", label: "Skills" },
+  { href: "/resume", label: "Resume" },
   { href: "/contact", label: "Contact" },
 ];
 
