@@ -6,7 +6,7 @@ import { PageHero } from "@/components/layout/page-hero";
 
 export const metadata: Metadata = createPageMetadata(
   "Projects",
-  "Explore a curated collection of web applications, mobile apps, and enterprise solutions built with modern technologies.",
+  "Personal portfolio work and business system projects — web applications, management platforms, and production-ready software built with modern technologies.",
   "/projects"
 );
 
@@ -16,7 +16,7 @@ export default function ProjectsPage() {
       <PageHero
         label="Portfolio"
         title="Projects that define my craft"
-        description="From startups to enterprise — each project represents a unique challenge solved with creativity, precision, and modern technology."
+        description="A selection of personal work and business system experience — built with modern technologies, clean architecture, and a focus on real operational value."
       />
       <ProjectsGrid showHeader={false} />
       <CTASection />

@@ -90,15 +90,24 @@ export function ProjectDetail({ project }: ProjectDetailProps) {
             </ScrollReveal>
           </div>
 
-          <div className="mt-16 grid gap-12 md:grid-cols-3">
+          <div className="mt-16 grid gap-12 md:grid-cols-2">
             <ScrollReveal>
+              <ProjectCaseStudyList title="Key features" items={project.features} />
+            </ScrollReveal>
+            <ScrollReveal delay={0.05}>
               <ProjectCaseStudyList title="Challenges" items={project.challenges} />
             </ScrollReveal>
-            <ScrollReveal delay={0.1}>
-              <ProjectCaseStudyList title="Solutions" items={project.solutions} />
+          </div>
+
+          <div className="mt-12 grid gap-12 md:grid-cols-2">
+            <ScrollReveal>
+              <ProjectCaseStudyList title="Solution" items={project.solutions} />
             </ScrollReveal>
-            <ScrollReveal delay={0.2}>
-              <ProjectCaseStudyList title="Results" items={project.results} />
+            <ScrollReveal delay={0.05}>
+              <ProjectCaseStudyList
+                title="Business impact"
+                items={project.results}
+              />
             </ScrollReveal>
           </div>
 

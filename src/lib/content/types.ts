@@ -100,6 +100,7 @@ export interface Project {
   challenges: string[];
   solutions: string[];
   results: string[];
+  features: string[];
   /** Fallback card styling when no cover image is provided */
   gradient?: string;
   accent?: string;

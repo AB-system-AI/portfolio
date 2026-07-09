@@ -32,7 +32,7 @@ export function ProjectsGrid({
           <SectionHeader
             label="Portfolio"
             title="Selected projects"
-            description="A curated collection of work spanning web applications, mobile apps, and enterprise solutions — each built with attention to detail and performance."
+            description="Personal projects and business systems — from portfolio sites and retail platforms to large-scale management software."
           />
         )}
 
