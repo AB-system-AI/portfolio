@@ -156,6 +156,10 @@ export interface Project {
   developmentProcess?: string[];
   pinned?: boolean;
   showcase?: ProjectShowcase;
+  research?: string[];
+  businessValue?: string[];
+  lessonsLearned?: string[];
+  futureImprovements?: string[];
   /** Fallback card styling when no cover image is provided */
   gradient?: string;
   accent?: string;

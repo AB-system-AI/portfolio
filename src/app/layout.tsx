@@ -4,6 +4,7 @@ import { ThemeProvider } from "@/components/providers/theme-provider";
 import { LocaleProvider } from "@/components/providers/locale-provider";
 import { Navbar } from "@/components/layout/navbar";
 import { Footer } from "@/components/layout/footer";
+import { BackToTop } from "@/components/layout/back-to-top";
 import { LoadingScreen } from "@/components/layout/loading-screen";
 import { ScrollProgress } from "@/components/layout/scroll-progress";
 import { SkipLink } from "@/components/layout/skip-link";
@@ -71,6 +72,7 @@ export default async function RootLayout({
               {children}
             </main>
             <Footer />
+            <BackToTop />
           </LocaleProvider>
         </ThemeProvider>
       </body>

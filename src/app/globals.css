@@ -177,6 +177,72 @@
       0 0 0 1px oklch(1 0 0 / 0.06),
       0 24px 48px -20px oklch(0 0 0 / 0.35);
   }
+  .premium-card-border {
+    position: relative;
+    isolation: isolate;
+  }
+  .premium-card-border::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    border-radius: inherit;
+    padding: 1px;
+    background: linear-gradient(
+      135deg,
+      oklch(1 0 0 / 0.14),
+      oklch(1 0 0 / 0.02) 40%,
+      oklch(1 0 0 / 0.1)
+    );
+    -webkit-mask:
+      linear-gradient(#fff 0 0) content-box,
+      linear-gradient(#fff 0 0);
+    mask:
+      linear-gradient(#fff 0 0) content-box,
+      linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    pointer-events: none;
+    opacity: 0.55;
+    transition: opacity 0.3s ease;
+  }
+  .premium-card-border:hover::before {
+    opacity: 1;
+  }
+  .grid-background {
+    background-image:
+      linear-gradient(oklch(1 0 0 / 0.04) 1px, transparent 1px),
+      linear-gradient(90deg, oklch(1 0 0 / 0.04) 1px, transparent 1px);
+    background-size: 48px 48px;
+  }
+  .animated-gradient-bg {
+    background: linear-gradient(
+      120deg,
+      oklch(0.97 0 0),
+      oklch(0.95 0 0),
+      oklch(0.98 0 0)
+    );
+    background-size: 200% 200%;
+    animation: gradient-shift 12s ease infinite;
+  }
+  .dark .animated-gradient-bg {
+    background: linear-gradient(
+      120deg,
+      oklch(0.18 0 0),
+      oklch(0.14 0 0),
+      oklch(0.2 0 0)
+    );
+    background-size: 200% 200%;
+  }
+  @keyframes gradient-shift {
+    0%,
+    100% {
+      background-position: 0% 50%;
+    }
+    50% {
+      background-position: 100% 50%;
+    }
+  }
   .premium-button {
     @apply relative overflow-hidden transition-[box-shadow,transform] duration-300;
   }

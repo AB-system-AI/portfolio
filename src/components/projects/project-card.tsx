@@ -38,7 +38,7 @@ export function ProjectCard({ project, index, compact = false }: ProjectCardProp
       <PremiumCard
         enableGlow
         className={cn(
-          "group overflow-hidden transition-[transform,box-shadow,border-color] duration-500 hover:shadow-2xl hover:shadow-black/5 dark:hover:shadow-black/20",
+          "premium-card-border group overflow-hidden transition-[transform,box-shadow,border-color] duration-300",
           compact && "h-full"
         )}
       >

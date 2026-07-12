@@ -67,7 +67,7 @@ export function ServicesCards({ showHeader = true }: ServicesCardsProps) {
 
               return (
                 <ScrollReveal key={service.title} delay={index * 0.08}>
-                  <PremiumCard className="flex h-full flex-col overflow-hidden p-8">
+                  <PremiumCard className="premium-card-border flex h-full flex-col overflow-hidden p-8">
                     <motion.div
                       animate={{ rotate: isExpanded ? 180 : 0 }}
                       transition={springSoft}

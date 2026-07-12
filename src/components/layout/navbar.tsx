@@ -71,16 +71,18 @@ export function Navbar() {
     <header className="fixed top-0 right-0 left-0 z-50 px-4 pt-4 sm:px-6">
       <motion.nav
         animate={{
-          y: scrolled ? 0 : 0,
+          paddingTop: scrolled ? 10 : 12,
+          paddingBottom: scrolled ? 10 : 12,
+          scale: scrolled ? 0.98 : 1,
           boxShadow: scrolled
             ? "0 12px 40px -20px rgba(0,0,0,0.25)"
             : "0 0 0 rgba(0,0,0,0)",
         }}
         transition={springSoft}
         className={cn(
-          "mx-auto flex max-w-6xl items-center justify-between rounded-2xl border px-4 py-3 transition-[background-color,border-color] duration-500 sm:px-6",
+          "mx-auto flex max-w-6xl items-center justify-between rounded-2xl border px-4 py-3 transition-[background-color,border-color] duration-300 sm:px-6",
           scrolled
-            ? "glass shadow-lg shadow-black/5 dark:shadow-black/20"
+            ? "glass border-border/60 shadow-lg shadow-black/5 dark:shadow-black/20"
             : "border-transparent bg-transparent"
         )}
         aria-label="Main navigation"

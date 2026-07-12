@@ -112,7 +112,7 @@ export function SkillsGrid({ showHeader = true }: SkillsGridProps) {
                   exit={{ opacity: 0, y: -12 }}
                   transition={{ duration: 0.25 }}
                 >
-                  <PremiumCard className="p-8">
+                  <PremiumCard className="premium-card-border p-8">
                     <div className="mb-6 flex flex-wrap items-center justify-between gap-4">
                       <h3 className="text-sm font-semibold uppercase tracking-wider">
                         {activeGroup.category}

@@ -6,6 +6,9 @@ import type { Project } from "@/lib/content/types";
 import { ProjectGallery } from "./project-gallery";
 import { ProjectLinks } from "./project-links";
 import { RelatedProjects } from "./related-projects";
+import { ProjectNavigation } from "./project-navigation";
+import { ProjectBackButton } from "./project-back-link";
+import { ProjectTableOfContents } from "./project-table-of-contents";
 import { StatsCounter } from "@/components/sections/stats-counter";
 import { ScrollReveal } from "@/components/animations/scroll-reveal";
 import { CTASection } from "@/components/sections/cta-section";
@@ -121,6 +124,19 @@ export function FlagshipProjectShowcase({ project }: FlagshipProjectShowcaseProp
   const related = getRelatedProjects(project, 3, locale);
   const accent = project.accent ?? "#fafafa";
 
+  const tocItems = [
+    { id: "highlights", label: showcase.labels.highlights },
+    { id: "statistics", label: showcase.labels.statistics },
+    { id: "product-lines", label: showcase.labels.productLines },
+    { id: "tech-stack", label: showcase.labels.techStack },
+    { id: "features", label: showcase.labels.features },
+    { id: "timeline", label: showcase.labels.timeline },
+    { id: "gallery", label: showcase.labels.gallery },
+    { id: "architecture", label: ui.projects.architecture },
+    { id: "problem", label: ui.projects.problem },
+    { id: "links", label: ui.projects.links },
+  ];
+
   return (
     <>
       <section className="relative overflow-hidden pt-28 pb-20 sm:pt-36 sm:pb-24">
@@ -134,6 +150,9 @@ export function FlagshipProjectShowcase({ project }: FlagshipProjectShowcaseProp
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,rgba(255,255,255,0.08),transparent_45%),radial-gradient(circle_at_80%_60%,rgba(255,255,255,0.05),transparent_40%)]" />
 
         <div className="relative mx-auto max-w-6xl px-4 sm:px-6">
+          <div className="mb-6">
+            <ProjectBackButton className="border-white/20 bg-white/10 text-white/80 hover:text-white" />
+          </div>
           <ScrollReveal>
             <div className="flex flex-wrap items-center gap-2">
               <Badge className="rounded-full border-white/20 bg-white/10 text-white backdrop-blur-sm">
@@ -171,7 +190,7 @@ export function FlagshipProjectShowcase({ project }: FlagshipProjectShowcaseProp
               ))}
             </div>
 
-            <div className="mt-8">
+            <div className="mt-8" id="links">
               <ProjectLinks project={project} size="lg" />
             </div>
           </ScrollReveal>
@@ -198,7 +217,10 @@ export function FlagshipProjectShowcase({ project }: FlagshipProjectShowcaseProp
       </section>
 
       <section className="py-20 sm:py-24">
-        <div className="mx-auto max-w-6xl px-4 sm:px-6">
+        <div className="mx-auto grid max-w-6xl gap-10 px-4 sm:px-6 xl:grid-cols-[220px_minmax(0,1fr)]">
+          <ProjectTableOfContents items={tocItems} />
+
+          <div>
           <SectionBlock id="highlights" title={showcase.labels.highlights}>
             <div className="flex flex-wrap gap-2">
               {showcase.highlights.map((item) => (
@@ -306,6 +328,10 @@ export function FlagshipProjectShowcase({ project }: FlagshipProjectShowcaseProp
           </div>
 
           <RelatedProjects projects={related} />
+          <div className="mt-16 space-y-8">
+            <ProjectNavigation project={project} />
+          </div>
+          </div>
         </div>
       </section>
 

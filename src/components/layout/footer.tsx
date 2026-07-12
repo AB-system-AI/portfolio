@@ -7,8 +7,8 @@ import { ArrowUpRight } from "lucide-react";
 import { GitHubIcon, LinkedInIcon, WhatsAppIcon } from "@/components/icons/brand-icons";
 import type { SocialPlatform } from "@/lib/content/types";
 import { useLocale } from "@/components/providers/locale-provider";
-import { Separator } from "@/components/ui/separator";
 import { AnimatedLink } from "@/components/ui/animated-link";
+import { MagneticLinkButton } from "@/components/ui/magnetic-button";
 import { springSoft } from "@/lib/motion";
 
 const socialIcons: Partial<
@@ -26,8 +26,44 @@ export function Footer() {
   return (
     <footer className="relative border-t border-border/50 bg-muted/30">
       <div className="mesh-gradient pointer-events-none absolute inset-0 opacity-40" aria-hidden="true" />
+
       <div className="relative mx-auto max-w-6xl px-4 py-16 sm:px-6">
-        <div className="grid gap-12 md:grid-cols-3">
+        <motion.div
+          initial={{ scaleX: 0 }}
+          whileInView={{ scaleX: 1 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.8, ease: [0.21, 0.47, 0.32, 0.98] }}
+          className="mb-12 h-px origin-left bg-gradient-to-r from-transparent via-border to-transparent"
+          aria-hidden="true"
+        />
+
+        <div className="premium-card premium-card-border overflow-hidden rounded-3xl p-8 sm:p-10">
+          <div className="flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
+            <div className="max-w-xl">
+              <h2 className="font-heading text-2xl font-semibold tracking-tight sm:text-3xl">
+                {ui.footer.ctaTitle}
+              </h2>
+              <p className="mt-3 text-sm leading-relaxed text-muted-foreground sm:text-base">
+                {ui.footer.ctaDescription}
+              </p>
+            </div>
+            <div className="flex flex-wrap gap-3">
+              <MagneticLinkButton href="/contact" size="lg" className="rounded-full px-6">
+                {ui.footer.startProject}
+              </MagneticLinkButton>
+              <MagneticLinkButton
+                href={siteConfig.resumeUrl ?? "/resume"}
+                variant="outline"
+                size="lg"
+                className="rounded-full px-6"
+              >
+                {ui.footer.viewResume}
+              </MagneticLinkButton>
+            </div>
+          </div>
+        </div>
+
+        <div className="mt-16 grid gap-12 md:grid-cols-3">
           <div>
             <Link href="/" className="text-lg font-semibold tracking-tight">
               {siteConfig.name}
@@ -45,9 +81,9 @@ export function Footer() {
                     target="_blank"
                     rel="noopener noreferrer"
                     aria-label={`${link.label} profile (opens in new tab)`}
-                    whileHover={{ y: -2, scale: 1.05 }}
+                    whileHover={{ y: -3, scale: 1.05 }}
                     transition={springSoft}
-                    className="flex size-9 items-center justify-center rounded-full border border-border text-muted-foreground transition-colors hover:border-foreground hover:text-foreground"
+                    className="flex size-10 items-center justify-center rounded-full border border-border/60 bg-background/50 text-muted-foreground backdrop-blur-sm transition-colors hover:border-foreground hover:text-foreground"
                   >
                     {Icon ? (
                       <Icon className="size-4" />
@@ -90,12 +126,27 @@ export function Footer() {
               >
                 {siteConfig.email}
               </a>
+              <a
+                href={siteConfig.whatsapp}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="block text-sm text-muted-foreground transition-colors hover:text-foreground"
+              >
+                WhatsApp
+              </a>
               <p className="text-sm text-muted-foreground">{siteConfig.location}</p>
             </div>
           </div>
         </div>
 
-        <Separator className="my-8" />
+        <motion.div
+          initial={{ scaleX: 0 }}
+          whileInView={{ scaleX: 1 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.8, ease: [0.21, 0.47, 0.32, 0.98], delay: 0.1 }}
+          className="my-8 h-px origin-left bg-gradient-to-r from-transparent via-border to-transparent"
+          aria-hidden="true"
+        />
 
         <div className="flex flex-col items-center justify-between gap-4 sm:flex-row">
           <p className="text-xs text-muted-foreground">

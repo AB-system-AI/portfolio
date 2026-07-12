@@ -1,7 +1,10 @@
 "use client";
 
+import type { ComponentType } from "react";
 import { motion } from "framer-motion";
 import { ArrowRight, Mail } from "lucide-react";
+import { GitHubIcon, LinkedInIcon, WhatsAppIcon } from "@/components/icons/brand-icons";
+import type { SocialPlatform } from "@/lib/content/types";
 import { MagneticLinkButton } from "@/components/ui/magnetic-button";
 import { AvailabilityBadge } from "@/components/ui/availability-badge";
 import { AnimatedBackground } from "@/components/animations/animated-background";
@@ -10,7 +13,17 @@ import { TypingText } from "@/components/animations/typing-text";
 import { StatsCounter } from "@/components/sections/stats-counter";
 import { useLocale } from "@/components/providers/locale-provider";
 import { useReducedMotion } from "@/hooks/use-reduced-motion";
-import { EASE_PREMIUM } from "@/lib/motion";
+import { EASE_PREMIUM, springSoft } from "@/lib/motion";
+
+const socialIcons: Partial<
+  Record<SocialPlatform, ComponentType<{ className?: string }>>
+> = {
+  github: GitHubIcon,
+  linkedin: LinkedInIcon,
+  whatsapp: WhatsAppIcon,
+};
+
+const floatingTech = ["Next.js", "TypeScript", "React", "Node.js", "PostgreSQL", "Tailwind"];
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -29,13 +42,50 @@ const itemVariants = {
   },
 };
 
+function FloatingTechIcons() {
+  const prefersReducedMotion = useReducedMotion();
+
+  if (prefersReducedMotion) return null;
+
+  return (
+    <div className="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden="true">
+      {floatingTech.map((tech, index) => (
+        <motion.span
+          key={tech}
+          initial={{ opacity: 0, y: 20 }}
+          animate={{
+            opacity: [0.15, 0.35, 0.15],
+            y: [0, -12, 0],
+            x: [0, index % 2 === 0 ? 6 : -6, 0],
+          }}
+          transition={{
+            duration: 5 + index * 0.6,
+            repeat: Infinity,
+            ease: "easeInOut",
+            delay: index * 0.4,
+          }}
+          className="absolute rounded-full border border-border/40 bg-background/40 px-3 py-1.5 text-[10px] font-medium text-muted-foreground backdrop-blur-sm sm:text-xs"
+          style={{
+            top: `${12 + index * 12}%`,
+            left: index % 2 === 0 ? `${6 + index * 4}%` : undefined,
+            right: index % 2 === 1 ? `${4 + index * 3}%` : undefined,
+          }}
+        >
+          {tech}
+        </motion.span>
+      ))}
+    </div>
+  );
+}
+
 export function Hero() {
   const prefersReducedMotion = useReducedMotion();
-  const { siteConfig, portfolioStats, ui } = useLocale();
+  const { siteConfig, portfolioStats, socialLinks, ui } = useLocale();
 
   return (
     <section className="relative flex min-h-screen items-center overflow-hidden pt-24">
       <AnimatedBackground />
+      <FloatingTechIcons />
 
       <div className="relative mx-auto w-full max-w-6xl px-4 sm:px-6">
         <motion.div
@@ -85,6 +135,26 @@ export function Hero() {
               <Mail className="size-4" />
               {ui.hero.getInTouch}
             </MagneticLinkButton>
+          </motion.div>
+
+          <motion.div variants={itemVariants} className="mt-8 flex gap-3">
+            {socialLinks.map((link) => {
+              const Icon = socialIcons[link.platform];
+              return (
+                <motion.a
+                  key={link.url}
+                  href={link.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={`${link.label} (opens in new tab)`}
+                  whileHover={{ y: -3, scale: 1.06 }}
+                  transition={springSoft}
+                  className="flex size-10 items-center justify-center rounded-full border border-border/60 bg-background/50 text-muted-foreground backdrop-blur-sm transition-colors hover:border-foreground hover:text-foreground"
+                >
+                  {Icon ? <Icon className="size-4" /> : link.label.charAt(0)}
+                </motion.a>
+              );
+            })}
           </motion.div>
 
           <motion.div

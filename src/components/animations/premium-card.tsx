@@ -1,9 +1,11 @@
 "use client";
 
+import { memo } from "react";
 import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { useCardTilt } from "@/hooks/use-card-tilt";
 import { springSoft } from "@/lib/motion";
+import { useReducedMotion } from "@/hooks/use-reduced-motion";
 import type { ReactNode } from "react";
 
 interface PremiumCardProps {
@@ -11,32 +13,43 @@ interface PremiumCardProps {
   className?: string;
   enableTilt?: boolean;
   enableGlow?: boolean;
+  enableLift?: boolean;
   tiltIntensity?: number;
   onClick?: () => void;
 }
 
-export function PremiumCard({
+function PremiumCardComponent({
   children,
   className,
   enableTilt = true,
   enableGlow = true,
+  enableLift = true,
   tiltIntensity = 6,
   onClick,
 }: PremiumCardProps) {
+  const prefersReducedMotion = useReducedMotion();
   const { ref, tilt, handleMouseMove, handleMouseLeave, isInteractive } =
     useCardTilt(tiltIntensity);
 
-  if (!isInteractive || !enableTilt) {
+  const baseClass = cn(
+    "premium-card glass-card rounded-2xl transition-[border-color,box-shadow,transform] duration-300",
+    enableGlow && "premium-card-glow",
+    className
+  );
+
+  const liftHover = enableLift && !prefersReducedMotion
+    ? { y: -10, transition: springSoft }
+    : undefined;
+
+  if (!isInteractive || !enableTilt || prefersReducedMotion) {
     return (
-      <div
+      <motion.div
         onClick={onClick}
-        className={cn(
-          "premium-card glass-card rounded-2xl transition-[border-color,box-shadow] duration-500",
-          className
-        )}
+        whileHover={liftHover}
+        className={baseClass}
       >
         {children}
-      </div>
+      </motion.div>
     );
   }
 
@@ -46,17 +59,14 @@ export function PremiumCard({
       onClick={onClick}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
+      whileHover={liftHover}
       style={{
         rotateX: tilt.rotateX,
         rotateY: tilt.rotateY,
         transformPerspective: 1200,
       }}
       transition={springSoft}
-      className={cn(
-        "premium-card group/card relative rounded-2xl transition-[box-shadow] duration-500",
-        enableGlow && "premium-card-glow",
-        className
-      )}
+      className={cn("premium-card group/card relative rounded-2xl", baseClass)}
     >
       <div
         className="pointer-events-none absolute inset-0 rounded-[inherit] opacity-0 transition-opacity duration-500 group-hover/card:opacity-100"
@@ -69,3 +79,5 @@ export function PremiumCard({
     </motion.div>
   );
 }
+
+export const PremiumCard = memo(PremiumCardComponent);

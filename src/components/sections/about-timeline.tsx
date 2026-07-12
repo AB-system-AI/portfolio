@@ -5,6 +5,7 @@ import { formatExperiencePeriod } from "@/lib/content/experience";
 import { useLocale } from "@/components/providers/locale-provider";
 import { SectionHeader } from "@/components/animations/section-header";
 import { ScrollReveal } from "@/components/animations/scroll-reveal";
+import { PremiumCard } from "@/components/animations/premium-card";
 import { Badge } from "@/components/ui/badge";
 import type { Experience } from "@/lib/content/types";
 import type { UiDictionary } from "@/lib/i18n/ui";
@@ -59,7 +60,7 @@ function ExperienceCard({
   labels: UiDictionary["about"];
 }) {
   return (
-    <div className="glass-card ml-8 rounded-2xl p-6 text-left transition-[border-color,box-shadow] duration-500 hover:border-border hover:shadow-xl hover:shadow-black/5 sm:ml-0 dark:hover:shadow-black/20">
+    <PremiumCard className="ml-8 p-6 text-left sm:ml-0">
       <div
         className={`flex flex-wrap items-center gap-2 ${
           align === "right" ? "sm:justify-end" : ""
@@ -126,7 +127,7 @@ function ExperienceCard({
           </div>
         </div>
       )}
-    </div>
+    </PremiumCard>
   );
 }
 

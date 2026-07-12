@@ -106,6 +106,84 @@ export function getRelatedProjects(
     .slice(0, limit);
 }
 
+export function getAdjacentProjects(
+  project: Project,
+  locale: Locale = "en"
+): { previous?: Project; next?: Project } {
+  const ordered = getAllProjects()
+    .map((item) => localizeProject(item, locale))
+    .sort((a, b) => {
+      const orderA = a.featuredOrder ?? 999;
+      const orderB = b.featuredOrder ?? 999;
+      if (orderA !== orderB) return orderA - orderB;
+      return b.year - a.year;
+    });
+
+  const index = ordered.findIndex((item) => item.slug === project.slug);
+  if (index === -1) return {};
+
+  return {
+    previous: index > 0 ? ordered[index - 1] : undefined,
+    next: index < ordered.length - 1 ? ordered[index + 1] : undefined,
+  };
+}
+
+export interface EnterpriseCaseStudySection {
+  id: string;
+  label: string;
+}
+
+export function getEnterpriseCaseStudySections(
+  project: Project,
+  locale: Locale = "en"
+): EnterpriseCaseStudySection[] {
+  const ui = getUi(locale);
+  const sections: EnterpriseCaseStudySection[] = [
+    { id: "overview", label: ui.projects.overview },
+    { id: "problem", label: ui.projects.problem },
+  ];
+
+  if (project.research?.length) {
+    sections.push({ id: "research", label: ui.projects.research });
+  }
+
+  sections.push(
+    { id: "architecture", label: ui.projects.architecture },
+    { id: "implementation", label: ui.projects.implementation },
+    { id: "features", label: ui.projects.features },
+    { id: "technologies", label: ui.projects.technologies },
+    { id: "challenges", label: ui.projects.challenges },
+    { id: "solutions", label: ui.projects.solution }
+  );
+
+  const impact = project.businessValue ?? project.results;
+  if (impact.length > 0) {
+    sections.push({ id: "business-impact", label: ui.projects.businessImpact });
+  }
+
+  if (project.lessonsLearned?.length) {
+    sections.push({ id: "lessons-learned", label: ui.projects.lessonsLearned });
+  }
+
+  if (project.futureImprovements?.length) {
+    sections.push({
+      id: "future-improvements",
+      label: ui.projects.futureImprovements,
+    });
+  }
+
+  if (getProjectTimeline(project, locale)) {
+    sections.push({ id: "timeline", label: ui.projects.timeline });
+  }
+
+  sections.push(
+    { id: "gallery", label: ui.projects.gallery },
+    { id: "links", label: ui.projects.links }
+  );
+
+  return sections;
+}
+
 export function getPortfolioProjectCounters() {
   const projects = getAllProjects();
   const currentYear = new Date().getFullYear();

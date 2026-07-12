@@ -1,8 +1,16 @@
 "use client";
 
+import dynamic from "next/dynamic";
 import type { Project } from "@/lib/content/types";
 import { ProjectDetail as StandardProjectDetail } from "./project-detail-standard";
-import { FlagshipProjectShowcase } from "./flagship-project-showcase";
+
+const FlagshipProjectShowcase = dynamic(
+  () =>
+    import("./flagship-project-showcase").then((module) => ({
+      default: module.FlagshipProjectShowcase,
+    })),
+  { ssr: true }
+);
 
 interface ProjectDetailProps {
   project: Project;
